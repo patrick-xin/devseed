@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { FormLayout } from '@/components/layout'
-import { useCategory, useUser, useUserCategory, useUserMark } from '@/lib/hooks'
+import { useCategory, useUserMark } from '@/lib/hooks'
 import { createMark } from 'services/api'
 import { useRouter } from 'next/router'
 
