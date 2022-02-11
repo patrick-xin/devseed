@@ -1,0 +1,8 @@
+export { default as EditIcon } from './EditIcon'
+export { default as HeartIcon } from './HeartIcon'
+export { default as HeartSolidIcon } from './HeartSolidIcon'
+export { default as ChatIcon } from './ChatIcon'
+export { default as DownVoteIcon } from './DownVoteIcon'
+export { default as UpVoteIcon } from './UpVoteIcon'
+export { default as SearchIcon } from './SearchIcon'
+export { default as LoadingIcon } from './LoadingIcon'
