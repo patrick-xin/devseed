@@ -1,6 +1,6 @@
-import { Header } from '@/components/header'
 import { ChatIcon } from '@/components/icons'
 import BasicLayout from '@/components/layout/BasicLayout'
+
 import Image from 'next/image'
 import React from 'react'
 import { ButtonLink } from '../components'
@@ -37,7 +37,12 @@ const HomePage = () => {
             </div>
 
             <div className="relative h-full w-full">
-              <Image src="/assets/images/hero.svg" layout="fill" />
+              <Image
+                src="/assets/images/hero.svg"
+                layout="fill"
+                alt="hero"
+                priority
+              />
             </div>
             <div className="absolute bottom-20 right-24 h-8 w-72 bg-purple-500/10 md:right-6 md:bottom-20 lg:bottom-1/2"></div>
             <div className="absolute bottom-40 right-0 h-12 w-[30vw] bg-pink-500/5 md:right-1/2 md:bottom-32 lg:-right-20 lg:bottom-1/3"></div>

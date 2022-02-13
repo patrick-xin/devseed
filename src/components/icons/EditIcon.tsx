@@ -3,7 +3,7 @@ import Link from 'next/link'
 export const EditIcon = ({ id }: { id: string }) => {
   return (
     <Link href={`/m/${id}/edit`}>
-      <a className="rounded-lg p-2 transition-colors ease-linear dark:bg-white/10 dark:hover:bg-white/20">
+      <a className="inline-block rounded-lg p-2 transition-colors ease-linear dark:bg-white/10 dark:hover:bg-white/20">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-4 w-4"

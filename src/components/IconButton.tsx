@@ -26,4 +26,6 @@ const IconButton = React.forwardRef<Ref, IconButtonProps>(
   }
 )
 
+IconButton.displayName = 'IconButton'
+
 export default IconButton

@@ -1,7 +1,10 @@
+import * as React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import * as React from 'react'
+
 import { Badge } from '.'
+import IconButton from './IconButton'
+import { format } from 'date-fns'
 import {
   ChatIcon,
   DownVoteIcon,
@@ -10,34 +13,38 @@ import {
   HeartSolidIcon,
   UpVoteIcon,
 } from './icons'
-
-export type BookMark = {
-  id: string
-  title: string
-  author: { name: string; image: string }
-  category: { name: string }[]
-  url: string
-  description: string
-  commentCount: number
-  likeCount: number
-  isOwner: boolean
-}
+import { capLetter } from 'uitls'
+import { Mark } from '@/lib/types'
+import { useLikeMark } from '@/lib/hooks'
 
 type BookmarkProps = {
-  bookmark: BookMark
+  bookmark: Mark
+  isOwner: boolean | undefined
+  hasLiked: boolean | undefined
 }
 
-const Bookmark = ({ bookmark, isOwner }: BookmarkProps) => {
-  const {
-    title,
-    author,
-    category,
-    url,
-    description,
-    commentCount,
-    likeCount,
-    id,
-  } = bookmark
+const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
+  const { title, author, tags, url, description, type, _count, id, createdAt } =
+    bookmark
+
+  const { likeMark } = useLikeMark()
+  const renderLikeIcon = () => {
+    if (!isOwner && !hasLiked)
+      return (
+        <IconButton onClick={() => likeMark(id)}>
+          <HeartIcon />
+        </IconButton>
+      )
+
+    if (!isOwner && hasLiked)
+      return (
+        <IconButton>
+          <HeartSolidIcon />
+        </IconButton>
+      )
+    return null
+  }
+  console.log(_count)
 
   return (
     <div className="m-4 flex max-w-xl flex-col justify-between space-y-6 rounded-lg border p-4 dark:border-white/10 lg:p-6">
@@ -48,17 +55,16 @@ const Bookmark = ({ bookmark, isOwner }: BookmarkProps) => {
               <h3 className="text-xl font-bold lg:text-2xl">{title}</h3>
             </a>
           </Link>
-
-          <HeartIcon />
+          {renderLikeIcon()}
         </div>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-1">
             <ChatIcon />
-            <span className="text-xs">{commentCount}</span>
+            <span className="text-xs">{_count.comments}</span>
           </div>
           <div className="flex items-center gap-1">
             <HeartSolidIcon />
-            <span className="text-xs">{likeCount}</span>
+            <span className="text-xs">{_count.likes}</span>
           </div>
         </div>
       </header>
@@ -69,20 +75,28 @@ const Bookmark = ({ bookmark, isOwner }: BookmarkProps) => {
 
           <UserAvatarWithName username={author.name} image={author.image} />
         </div>
+        <div className="mb-2 flex items-center text-xs">
+          <SubHeading title="Created At" />
+          <div>{format(new Date(createdAt), 'dd, LLL yyyy')}</div>
+        </div>
         <div className="mb-2 flex">
-          <SubHeading title="Category" />
+          <SubHeading title="Tags" />
           <div className="flex gap-2">
-            {category.map((tag) => (
+            {tags.map((tag) => (
               <Badge name={tag.name} key={tag.name} />
             ))}
           </div>
+        </div>
+        <div className="mb-2 flex items-center text-xs">
+          <SubHeading title="Category" />
+          <div>{capLetter(type)}</div>
         </div>
         <div>
           <SubHeading title="Link" />
           <a
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block cursor-pointer break-words underline"
+            className="inline-block max-w-full cursor-pointer break-words underline"
           >
             {url}
           </a>
@@ -94,7 +108,7 @@ const Bookmark = ({ bookmark, isOwner }: BookmarkProps) => {
         </div>
       </div>
 
-      <div className="flex flex-1 justify-between pt-4">
+      <div className="flex flex-1 items-center justify-between pt-4">
         <div>
           <UpvoteDownVote />
         </div>
@@ -132,6 +146,7 @@ export const UserAvatarWithName = ({
           height={30}
           width={30}
           className="rounded-full"
+          alt={`${username}-avatar`}
         />
       </div>
     </div>

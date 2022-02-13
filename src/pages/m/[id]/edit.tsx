@@ -4,9 +4,12 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { FormLayout } from '@/components/layout'
-import { useCategory, useUserMark } from '@/lib/hooks'
+import { useTags, useUserMark } from '@/lib/hooks'
 import { createMark } from 'services/api'
 import { useRouter } from 'next/router'
+import { markTypes } from '@/lib/constants'
+import { Listbox } from '@headlessui/react'
+import { CheckIcon, SelectorIcon } from '@/components/icons'
 
 const schema = z.object({
   title: z
@@ -27,16 +30,11 @@ type FormValues = {
 
 const EditPage = () => {
   const router = useRouter()
-  const { mark, isLoading } = useUserMark(router.query.id)
-  const { category } = useCategory()
-  console.log(mark)
-  const [formData, setFormData] = useState<FormValues>({
-    title: '',
-    description: '',
-    url: '',
-  })
-  const [selected, setSelected] = useState([])
+  const { mark, isLoading } = useUserMark(router.query.id as string)
+  const { tags } = useTags()
 
+  const [selected, setSelected] = useState([])
+  const [selectedType, setSelecedType] = useState(markTypes[0])
   const {
     register,
     watch,
@@ -56,13 +54,14 @@ const EditPage = () => {
         url: mark?.url,
       })
     }
-  }, [mark, reset])
-  const onSubmit = async (data) => {
+  }, [mark, reset, tags])
+  const onSubmit = async (data: FormValues) => {
     await createMark({
-      category: selected,
+      tags: selected,
       description: data.description,
       title: data.title,
       markLink: data.url,
+      type: selectedType,
     })
   }
 
@@ -70,10 +69,56 @@ const EditPage = () => {
   return (
     <FormLayout title="Edit Mark">
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <Listbox value={selectedType} onChange={setSelecedType}>
+          <div className="relative mt-1">
+            <Listbox.Button className="relative w-full cursor-default rounded-lg border border-white/10 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none">
+              <span className="block truncate">{selectedType}</span>
+              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                <SelectorIcon />
+              </span>
+            </Listbox.Button>
+            <div>
+              <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-primary py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                {markTypes.map((type) => (
+                  <Listbox.Option
+                    key={type}
+                    className={({ active }) =>
+                      `${active ? 'bg-white/10' : ''}
+                          relative cursor-default select-none py-2 pl-10 pr-4`
+                    }
+                    value={type}
+                  >
+                    {({ selected, active }) => (
+                      <>
+                        <span
+                          className={`${
+                            selected ? 'font-medium' : 'font-normal'
+                          } block truncate`}
+                        >
+                          {type}
+                        </span>
+                        {selected ? (
+                          <span
+                            className={`${
+                              active ? 'text-amber-600' : 'text-amber-600'
+                            }
+                                absolute inset-y-0 left-0 flex items-center pl-3`}
+                          >
+                            <CheckIcon />
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </div>
+          </div>
+        </Listbox>
         <MultiSelect
           isCreatable={true}
           hasSelectAll={false}
-          options={category}
+          options={tags}
           value={selected}
           onChange={setSelected}
           labelledBy={'Select'}

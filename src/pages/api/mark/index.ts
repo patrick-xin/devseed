@@ -9,15 +9,35 @@ const handler = nc<Request, NextApiResponse>()
 
 handler.use(middleware)
 
-handler.get(async ({ db }, res) => {
+handler.get(async ({ db, query }, res) => {
+  const limit = 4
+
+  const cursor = (query.cursor as string) ?? ''
+  const cursorObj = cursor === '' ? undefined : { id: cursor }
+  const order = query.order as 'asc' | 'desc'
+
   const marks = await db.mark.findMany({
-    include: {
+    orderBy: { createdAt: order },
+    take: limit,
+    skip: cursor == '' ? 0 : 1,
+    cursor: cursorObj,
+    select: {
       author: { select: { image: true, name: true } },
-      category: { select: { name: true } },
+      tags: { select: { name: true } },
+      createdAt: true,
+      description: true,
+      id: true,
+      url: true,
+      title: true,
+      type: true,
+      _count: { select: { likes: true, comments: true } },
     },
   })
 
-  res.status(200).json(marks)
+  res.status(200).json({
+    marks,
+    nextId: marks.length === limit ? marks[limit - 1].id : undefined,
+  })
 })
 
 export default handler

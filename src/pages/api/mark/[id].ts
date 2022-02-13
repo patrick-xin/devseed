@@ -16,7 +16,7 @@ handler.get(async ({ db, query }, res) => {
 
     include: {
       author: { select: { image: true, name: true } },
-      category: { select: { name: true } },
+      tags: { select: { name: true } },
     },
   })
 

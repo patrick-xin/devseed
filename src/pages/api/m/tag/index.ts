@@ -8,13 +8,13 @@ const handler = nc<Request, NextApiResponse>()
 handler.use(middleware)
 
 handler.get(async ({ db }, res) => {
-  const data = await db.category.findMany({
+  const data = await db.tag.findMany({
     select: { name: true, id: true },
   })
 
-  const category = data.map((d) => ({ label: d.name, value: d.name }))
+  const tags = data.map((d) => ({ label: d.name, value: d.name }))
 
-  res.status(200).json(category)
+  res.status(200).json(tags)
 })
 
 export default handler

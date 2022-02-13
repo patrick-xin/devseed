@@ -20,10 +20,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) =>
       }),
     ],
     callbacks: {
-      async session({ session, user, token }) {
+      async session({ session, token }) {
         return { ...session, userId: token.id }
       },
-      async jwt({ token, user, account, profile, isNewUser }) {
+      async jwt({ token, user, isNewUser }) {
         if (token && user) {
           return { ...token, id: `${user.id}`, isNewUser }
         }

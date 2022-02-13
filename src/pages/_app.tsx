@@ -5,10 +5,10 @@ import { NextPage } from 'next'
 import { SessionProvider } from 'next-auth/react'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
-import { SWRConfig } from 'swr'
+import dynamic from 'next/dynamic'
 import '@/styles/globals.css'
-import { Toast } from '../components'
 
+const Toast = dynamic(() => import('@/components/Toast'), { ssr: false })
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode
 }
@@ -22,20 +22,18 @@ const App = ({
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page)
-
+  const [queryClient] = useState(() => new QueryClient())
   return (
     <SessionProvider session={session}>
-      <SWRConfig
-        value={{
-          fetcher: (resource, init) =>
-            fetch(resource, init).then((res) => res.json()),
-        }}
-      >
-        <ThemeProvider attribute="class">
-          <Toast />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
-      </SWRConfig>
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <ThemeProvider attribute="class">
+            {getLayout(<Component {...pageProps} />)}
+            <Toast />
+          </ThemeProvider>
+          <ReactQueryDevtools />
+        </Hydrate>
+      </QueryClientProvider>
     </SessionProvider>
   )
 }

@@ -1,12 +1,15 @@
 import { useUser } from '@/lib/hooks'
+import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import * as React from 'react'
 import { ButtonLink } from '..'
 import SearchInput from './SearchInput'
-
+import { signOut } from 'next-auth/react'
 const Header = () => {
   const { session } = useUser()
+  const { setTheme } = useTheme()
+
   return (
     <header>
       <nav className="mx-auto h-24 w-full">
@@ -15,6 +18,10 @@ const Header = () => {
             <Link href="/">
               <a>devShare</a>
             </Link>
+          </li>
+          <li>
+            <button onClick={() => setTheme('light')}>Light</button>
+            <button onClick={() => setTheme('dark')}>Dark</button>
           </li>
           <li className="mx-4">
             <ButtonLink href="/mark" className="bg-indigo-500">
@@ -31,20 +38,29 @@ const Header = () => {
           </li>
           <li className="mx-4">
             {session ? (
-              <div>
-                <Image
-                  src={session.user?.image!}
-                  layout="fixed"
-                  height={40}
-                  width={40}
-                  className="rounded-full"
-                />
-              </div>
+              <Link href={'/me'}>
+                <a>
+                  <div>
+                    <Image
+                      src={session.user?.image!}
+                      layout="fixed"
+                      height={40}
+                      width={40}
+                      className="rounded-full"
+                      alt={session.user?.name!}
+                    />
+                    {session.user?.name}
+                  </div>
+                </a>
+              </Link>
             ) : (
               <ButtonLink href="/login" className="bg-purple-500">
                 login
               </ButtonLink>
             )}
+          </li>
+          <li>
+            {session && <button onClick={() => signOut()}>logout</button>}
           </li>
         </ul>
       </nav>

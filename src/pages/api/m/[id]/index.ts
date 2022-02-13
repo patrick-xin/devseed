@@ -16,20 +16,20 @@ handler.get(async ({ db, query }, res) => {
 
   const data = await db.mark.findUnique({
     where: { id },
-    include: { category: true },
+    include: { tags: true },
   })
-  const category = data?.category.map((d) => ({ label: d.name, value: d.name }))
+  const category = data?.tags.map((d) => ({ label: d.name, value: d.name }))
   res.status(200).json({ ...data, category })
 })
 
-handler.delete(async ({ db, query, user }, res) => {
+handler.delete(async ({ db, query }, res) => {
   const id = query.id as string
 
   const mark = await db.mark.delete({
     where: {
       id: id,
     },
-    select: { category: true, title: true, url: true, description: true },
+    select: { tags: true, title: true, url: true, description: true },
   })
 
   res.status(200).json(mark)
@@ -39,7 +39,7 @@ handler.patch(async ({ db, user, query, body }, res) => {
   const id = query.id as string
   const { title, markLink, description, category } = body
 
-  const categoryData = category.map((c) => ({
+  const categoryData = category.map((c: { value: string }) => ({
     where: { name: c.value },
     create: { name: c.value },
   }))
@@ -50,7 +50,7 @@ handler.patch(async ({ db, user, query, body }, res) => {
       title,
       description,
       url: markLink,
-      category: {
+      tags: {
         upsert: categoryData,
       },
     },
