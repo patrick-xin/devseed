@@ -24,7 +24,8 @@
     "react-multi-select-component": "^4.2.1",
     "react-query": "^3.34.14",
     "react-query-devtools": "^2.6.3",
-    "react-select": "^5.2.2",
+    "superjson": "^1.8.1",
+    "yarn": "^1.22.17",
     "zustand": "^3.7.0"
   },
   "devDependencies": {

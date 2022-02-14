@@ -1,10 +1,8 @@
-import * as React from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
-
-import { Badge } from '.'
-import IconButton from './IconButton'
 import { format } from 'date-fns'
+
+import { Badge, UserAvatar } from '.'
+import IconButton from './IconButton'
 import {
   ChatIcon,
   DownVoteIcon,
@@ -13,9 +11,12 @@ import {
   HeartSolidIcon,
   UpVoteIcon,
 } from './icons'
-import { capLetter } from 'uitls'
-import { Mark } from '@/lib/types'
+
 import { useLikeMark } from '@/lib/hooks'
+import { useMarkFormModalStore } from '@/lib/store/modal'
+
+import { capLetter } from 'uitls'
+import type { Mark } from '@/lib/types'
 
 type BookmarkProps = {
   bookmark: Mark
@@ -26,7 +27,7 @@ type BookmarkProps = {
 const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
   const { title, author, tags, url, description, type, _count, id, createdAt } =
     bookmark
-
+  const { openModal } = useMarkFormModalStore()
   const { likeMark } = useLikeMark()
   const renderLikeIcon = () => {
     if (!isOwner && !hasLiked)
@@ -44,10 +45,9 @@ const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
       )
     return null
   }
-  console.log(_count)
 
   return (
-    <div className="m-4 flex max-w-xl flex-col justify-between space-y-6 rounded-lg border p-4 dark:border-white/10 lg:p-6">
+    <div className="m-4 flex max-w-sm flex-col justify-between space-y-6 rounded-lg border p-4 dark:border-white/10 lg:p-6">
       <header>
         <div className="mb-2 flex items-center justify-between">
           <Link href={`/mark/${id}`}>
@@ -102,7 +102,7 @@ const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
           </a>
         </div>
         <div className="flex  flex-col justify-between">
-          <p className="min-h-[10rem] break-words text-sm font-light leading-loose tracking-wide dark:text-[#808080] lg:min-h-[8rem]">
+          <p className="break-words text-sm font-light leading-loose tracking-wide dark:text-[#808080]">
             {description}
           </p>
         </div>
@@ -112,7 +112,11 @@ const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
         <div>
           <UpvoteDownVote />
         </div>
-        {isOwner && <EditIcon id={id} />}
+        {isOwner && (
+          <button onClick={() => openModal({ type: 'edit', markId: id })}>
+            <EditIcon />
+          </button>
+        )}
       </div>
     </div>
   )
@@ -139,16 +143,7 @@ export const UserAvatarWithName = ({
   return (
     <div className="flex items-center gap-2">
       <div className="text-xs font-semibold">{username}</div>
-      <div className="relative h-6 w-6">
-        <Image
-          src={image}
-          layout="responsive"
-          height={30}
-          width={30}
-          className="rounded-full"
-          alt={`${username}-avatar`}
-        />
-      </div>
+      <UserAvatar username={username} image={image} />
     </div>
   )
 }

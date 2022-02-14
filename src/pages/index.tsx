@@ -1,7 +1,6 @@
 import { ChatIcon } from '@/components/icons'
 import BasicLayout from '@/components/layout/BasicLayout'
 
-import Image from 'next/image'
 import React from 'react'
 import { ButtonLink } from '../components'
 
@@ -12,16 +11,19 @@ const HomePage = () => {
         <>
           <div className="relative grid h-[calc(100vh-6rem)] grid-cols-1 grid-rows-2 lg:grid-cols-2 lg:grid-rows-none">
             <div className="col-start-1 space-y-4 lg:space-y-8">
-              <h1 className="whitespace-pre-wrap pb-6 pt-6 text-5xl font-black leading-normal lg:pt-12 lg:text-6xl lg:leading-snug">
-                Your <span className="text-purple-600/70">companion</span> along
-                with your{' '}
-                <span className="text-yellow-500 underline decoration-purple-500">
+              <h1 className="whitespace-pre-wrap pb-6 pt-6 text-5xl font-black leading-normal white-glow lg:pt-12 lg:text-6xl lg:leading-snug">
+                Your{' '}
+                <span className="text-purple-600/70 purple-glow">
+                  companion
+                </span>{' '}
+                along with your{' '}
+                <span className="text-yellow-500 underline decoration-purple-500 yellow-glow">
                   D
                 </span>
-                <span className="text-rose-500 underline decoration-purple-500">
+                <span className="text-rose-500 underline decoration-purple-500 red-glow">
                   e
                 </span>
-                <span className="text-green-500 underline decoration-purple-500">
+                <span className="text-green-500 underline decoration-purple-500 green-glow">
                   v
                 </span>{' '}
                 journey
@@ -36,14 +38,14 @@ const HomePage = () => {
               </ButtonLink>
             </div>
 
-            <div className="relative h-full w-full">
+            {/* <div className="relative h-full w-full">
               <Image
                 src="/assets/images/hero.svg"
                 layout="fill"
                 alt="hero"
                 priority
               />
-            </div>
+            </div> */}
             <div className="absolute bottom-20 right-24 h-8 w-72 bg-purple-500/10 md:right-6 md:bottom-20 lg:bottom-1/2"></div>
             <div className="absolute bottom-40 right-0 h-12 w-[30vw] bg-pink-500/5 md:right-1/2 md:bottom-32 lg:-right-20 lg:bottom-1/3"></div>
             <div className="absolute top-2/4 right-0 z-0 lg:top-1/4">

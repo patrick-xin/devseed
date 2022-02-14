@@ -5,17 +5,18 @@ import {
   InitialDataFunction,
   useInfiniteQuery,
 } from 'react-query'
+import { Listbox } from '@headlessui/react'
 
-import { Bookmark, Header, Badge } from '@/components/index'
+import { Bookmark, Header, Badge } from '@/components'
 import { CheckIcon, LoadingIcon, SelectorIcon } from '@/components/icons'
-import { useUserLikes, useUserMarks } from '@/lib/hooks'
 
+import { useUserLikes, useUserMarks } from '@/lib/hooks'
 import { API_BASE_URL, getMarks } from '@/services/api'
+import prisma from '@/lib/prisma'
 
 import type { Mark } from '@/lib/types'
-import prisma from '@/lib/prisma'
-import { Tag } from '@prisma/client'
-import { Listbox } from '@headlessui/react'
+import type { GetStaticProps } from 'next'
+import type { Tag } from '@prisma/client'
 
 type GroupResponse = { nextId?: string; marks: Mark[] }
 
@@ -53,11 +54,13 @@ export default function MarksPage({ initialData, tags }: MarksPageProps) {
     if (inView && hasNextPage) {
       fetchNextPage()
     }
+    //eslint-disable-next-line
   }, [inView])
 
   return (
     <div className="mx-auto max-w-6xl">
       <Header />
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h4 className="text-lg text-purple-600">Popular tags</h4>
@@ -112,7 +115,10 @@ export default function MarksPage({ initialData, tags }: MarksPageProps) {
         </Listbox>
       </div>
       {data?.pages?.map((group, i) => (
-        <div key={i} className="mx-auto grid grid-cols-1 lg:grid-cols-2">
+        <div
+          key={i}
+          className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+        >
           {group.marks.map((mark) => (
             <Bookmark
               key={mark.id}
@@ -136,21 +142,30 @@ export default function MarksPage({ initialData, tags }: MarksPageProps) {
   )
 }
 
-export async function getStaticProps() {
-  const initialData = await getMarks({ pageParam: '' })
-  const tags = await prisma.tag.findMany({
-    orderBy: { marks: { _count: 'desc' } },
-    take: 3,
-    select: {
-      id: true,
-      name: true,
-    },
-  })
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const initialData = await getMarks({ pageParam: '' })
 
-  return {
-    props: {
-      initialData,
-      tags,
-    },
+    const tags = await prisma.tag.findMany({
+      orderBy: { marks: { _count: 'desc' } },
+      take: 3,
+      select: {
+        id: true,
+        name: true,
+      },
+    })
+    return {
+      props: {
+        initialData,
+        tags,
+      },
+    }
+  } catch (error) {
+    return {
+      redirect: {
+        destination: '/500',
+        permanent: false,
+      },
+    }
   }
 }

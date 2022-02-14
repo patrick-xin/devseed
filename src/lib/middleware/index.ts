@@ -4,7 +4,7 @@ import nc from 'next-connect'
 import database from './db'
 
 const middleware = nc<Request, NextApiResponse>({
-  onError: (err, _, res: NextApiResponse) => {
+  onError: (err, req, res: NextApiResponse) => {
     res.status(500).end(err.toString())
   },
   onNoMatch: (_, res: NextApiResponse) => {

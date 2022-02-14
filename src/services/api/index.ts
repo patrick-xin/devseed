@@ -32,13 +32,17 @@ export const createMark = async ({
 
 export const updateMark = async ({
   title,
-  url,
+  markLink,
   description,
+  tags,
+  type,
   id,
 }: {
   title: string
-  url: string
+  markLink: string
   description: string
+  tags: string[]
+  type: string
   id: string
 }) => {
   const data = await fetch(`/api/m/${id}`, {
@@ -47,7 +51,7 @@ export const updateMark = async ({
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ title, url, description }),
+    body: JSON.stringify({ title, markLink, description, tags, type }),
   })
   return data.json()
 }
@@ -66,7 +70,7 @@ export const getMark = async (id: string) => {
 
 export const getMarks = async ({ pageParam = '', order = 'desc' }) => {
   const data = await fetch(
-    `${API_BASE_URL}/api/mark?cursor=${pageParam}&order=${order}`
+    `${API_BASE_URL}/api/mark?order=${order}&cursor=${pageParam}`
   )
   return data.json()
 }

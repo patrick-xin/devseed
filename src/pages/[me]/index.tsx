@@ -52,7 +52,7 @@ type PersonalBookmarkProps = {
   id: string
 }
 
-const PersonalBookmark = ({ title, note, link, id }: PersonalBookmarkProps) => {
+const PersonalBookmark = ({ title, note, link }: PersonalBookmarkProps) => {
   const [show, setShow] = useToggle()
   return (
     <div className="max-w-md">
@@ -61,7 +61,7 @@ const PersonalBookmark = ({ title, note, link, id }: PersonalBookmarkProps) => {
           <div className="w-full space-y-2">
             <div className="flex items-start justify-between">
               <h3 className="text-xl font-bold">{title}</h3>
-              <EditIcon id={id} />
+              <EditIcon />
             </div>
 
             <a

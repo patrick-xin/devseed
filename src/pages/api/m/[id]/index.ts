@@ -37,27 +37,36 @@ handler.delete(async ({ db, query }, res) => {
 
 handler.patch(async ({ db, user, query, body }, res) => {
   const id = query.id as string
-  const { title, markLink, description, category } = body
+  console.log(id)
 
-  const categoryData = category.map((c: { value: string }) => ({
+  const { title, markLink, description, tags, type } = body
+
+  const categoryData = tags.map((c: { value: string }) => ({
     where: { name: c.value },
     create: { name: c.value },
   }))
-  await db.mark.update({
-    where: { id },
-    data: {
-      author: { connect: { id: user.id } },
-      title,
-      description,
-      url: markLink,
-      tags: {
-        upsert: categoryData,
+  console.log(categoryData)
+  try {
+    await db.mark.update({
+      where: { id },
+      data: {
+        author: { connect: { id: user.id } },
+        title,
+        description,
+        url: markLink,
+        type,
+
+        tags: {
+          connectOrCreate: categoryData,
+        },
       },
-    },
-  })
-  res.status(200).json({
-    message: 'Mark has been updated',
-  })
+    })
+    res.status(200).json({
+      message: 'Mark has been updated',
+    })
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 export default handler

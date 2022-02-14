@@ -3,47 +3,43 @@
 @tailwind utilities;
 
 @layer base {
-    body {
-        @apply dark:bg-[#292929] dark:text-[#e5e5e5]
-    }
-  
+  body {
+    @apply dark:bg-[#0f0f0f] dark:text-[#e5e5e5];
+  }
 }
 
-@layer utilities{
-    .form-input {
-         @apply bg-transparent placeholder-shown:text-sm appearance-none rounded-md relative block w-full px-3 py-2 h-10 border border-gray-300 text-base dark:border-white/10 placeholder-gray-500 text-gray-900 dark:text-white/90 focus:outline-none focus:border-yellow-500 dark:focus:border-white/20 focus:border;
-     } 
+@layer utilities {
+  .form-input {
+    @apply relative block h-10 w-full appearance-none rounded-md border border-gray-300 bg-transparent px-3 py-2 text-base text-gray-900 placeholder-gray-500 placeholder-shown:text-sm focus:border focus:border-yellow-500 focus:outline-none dark:border-white/10 dark:text-white/90 dark:focus:border-white/20;
+  }
 }
 
 .rmsc .dropdown-container {
-    @apply bg-transparent border-white/10 outline-none !important
+  @apply border-white/10 bg-transparent outline-none !important;
 }
 .rmsc .dropdown-content .panel-content {
-   @apply bg-[#292929] !important
-   
+  @apply bg-[#292929] !important;
 }
 
-.rmsc .dropdown-container[aria-disabled="true"]:focus-within {
-  @apply border-none shadow-none outline-none !important
+.rmsc .dropdown-container[aria-disabled='true']:focus-within {
+  @apply border-white/10 shadow-none outline-none !important;
 }
-.rmsc .dropdown-container[aria-disabled="false"]:focus-within {
-    @apply border-none shadow-none outline-none !important
+.rmsc .dropdown-container[aria-disabled='false']:focus-within {
+  @apply border-white/10 shadow-none outline-none !important;
 }
 
 .rmsc .dropdown-container:focus-within {
-    @apply border-none shadow-none outline-none !important
+  @apply border-white/10 shadow-none outline-none !important;
 }
 .rmsc .select-item:hover,
 .rmsc .select-item:focus {
-    @apply bg-white/10 !important
-   
+  @apply bg-white/10 !important;
 }
 
 .rmsc .select-item.selected {
-    @apply bg-white/10 !important
-    
+  @apply bg-white/10 !important;
 }
 
 .rmsc .no-options {
-  @apply text-blue-500 !important
+  @apply text-blue-500 !important;
 }

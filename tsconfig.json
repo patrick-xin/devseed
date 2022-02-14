@@ -27,6 +27,7 @@
       "@/hooks/*": ["hooks/*"],
       "@/styles/*": ["styles/*"],
       "@/lib/*": ["lib/*"],
+      "@/utils": ["utils"],
       "@/utils/*": ["utils/*"],
       "@/config/*": ["config/*"]
     }

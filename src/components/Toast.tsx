@@ -1,14 +1,16 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useToastStore } from '@/lib/store/toast'
+import IconButton from './IconButton'
+import { CloseIcon } from './icons'
 const toastTypes = {
-  success: 'bg-green-500',
+  success: 'text-green-700 bg-primary',
   error: 'bg-red-500',
   warning: 'bg-yellow-500',
 }
 
 const positions = {
   topCenter: 'top-0 mx-auto',
-  topRight: 'top-0 right-0',
+  topRight: 'top-4 right-4',
   bottomCenter: 'bottom-0 mx-auto',
   bottomRight: 'bottom-0 right-0',
 }
@@ -57,12 +59,12 @@ const Toast = () => {
           initial="initial"
           animate="animate"
           exit="exit"
-          className={`${positions[position]} ${toastTypes[toastType]} fixed flex h-12 w-48 items-center justify-around rounded`}
+          className={`${positions[position]} ${toastTypes[toastType]} fixed z-100 flex h-12 w-48 items-center justify-around rounded lg:w-64`}
         >
           {message}
-          <button className="px-1 py-2" onClick={closeToast}>
-            X
-          </button>
+          <IconButton className="px-1 py-2" onClick={closeToast}>
+            <CloseIcon />
+          </IconButton>
         </motion.div>
       )}
     </AnimatePresence>

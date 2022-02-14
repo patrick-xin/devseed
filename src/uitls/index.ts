@@ -5,3 +5,10 @@ export const capLetter = (str: string) => {
 
   return firstLetter + rest
 }
+
+export const capLetters = (str: string) => {
+  const words = str.toLowerCase().split(' ')
+  const result = words.map((word) => capLetter(word)).join(' ')
+
+  return result
+}

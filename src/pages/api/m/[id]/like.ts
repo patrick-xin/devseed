@@ -42,7 +42,6 @@ handler.patch(async ({ db, user, query }, res) => {
       message: 'Mark has been added to the collection.',
     })
   } catch (error) {
-    console.log(error)
     res.status(500).json({
       message: 'Try again later.',
     })
