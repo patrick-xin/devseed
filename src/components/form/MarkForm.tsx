@@ -5,7 +5,7 @@ import { Listbox } from '@headlessui/react'
 import { MultiSelect } from 'react-multi-select-component'
 import * as z from 'zod'
 
-import Button from '../Button'
+import { Button } from '@/components/buttons'
 import { CheckIcon, SelectorIcon } from '../icons'
 import FormErrorMessage from './FormErrorMessage'
 import FormLabel from './FormLabel'
@@ -91,7 +91,7 @@ const MarkForm = () => {
   }, [mark, reset, modalType, setMarkType, tags, setSelecedTags])
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+    <form className="h-full space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <Listbox value={markType} onChange={setMarkType}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded-lg border border-white/10 py-2 pl-3 pr-10 text-left shadow-md focus:outline-none">

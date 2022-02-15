@@ -29,7 +29,7 @@ type FormValues = {
 }
 
 const CreatePage = () => {
-  const { tags, isLoading } = useTags()
+  const { tags, isLoadingTags } = useTags()
   const [selectedType, setSelecedType] = useState(markTypes[0])
 
   const [selected, setSelected] = useState([])
@@ -54,7 +54,7 @@ const CreatePage = () => {
     })
   }
 
-  if (isLoading) return <div>loading</div>
+  if (isLoadingTags) return <div>loading</div>
   return (
     <div>
       <FormLayout title="Create a Mark">

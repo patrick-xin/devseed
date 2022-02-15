@@ -1,4 +1,4 @@
-import { IconButton } from '..'
+import { IconButton } from '@/components/buttons'
 
 const DownVoteIcon = () => {
   return (

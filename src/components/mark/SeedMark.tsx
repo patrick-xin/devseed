@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { format } from 'date-fns'
 
-import { Badge, UserAvatar } from '.'
-import IconButton from './IconButton'
+import { SubHeading, UserAvatarWithName } from '.'
+import Badge from './Badge'
+import { IconButton } from '@/components/buttons'
 import {
   ChatIcon,
   DownVoteIcon,
@@ -10,7 +10,7 @@ import {
   HeartIcon,
   HeartSolidIcon,
   UpVoteIcon,
-} from './icons'
+} from '../icons'
 
 import { useLikeMark } from '@/lib/hooks'
 import { useMarkFormModalStore } from '@/lib/store/modal'
@@ -18,15 +18,14 @@ import { useMarkFormModalStore } from '@/lib/store/modal'
 import { capLetter } from 'uitls'
 import type { Mark } from '@/lib/types'
 
-type BookmarkProps = {
+type SeedMarkProps = {
   bookmark: Mark
   isOwner: boolean | undefined
   hasLiked: boolean | undefined
 }
 
-const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
-  const { title, author, tags, url, description, type, _count, id, createdAt } =
-    bookmark
+const SeedMark = ({ bookmark, isOwner, hasLiked }: SeedMarkProps) => {
+  const { title, author, tags, url, description, type, _count, id } = bookmark
   const { openModal } = useMarkFormModalStore()
   const { likeMark } = useLikeMark()
   const renderLikeIcon = () => {
@@ -47,7 +46,7 @@ const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
   }
 
   return (
-    <div className="m-4 flex max-w-sm flex-col justify-between space-y-6 rounded-lg border p-4 dark:border-white/10 lg:p-6">
+    <div className="m-4 flex flex-col justify-between space-y-6 rounded-lg border p-4 dark:border-white/10 lg:p-6">
       <header>
         <div className="mb-2 flex items-center justify-between">
           <Link href={`/mark/${id}`}>
@@ -69,25 +68,25 @@ const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
         </div>
       </header>
 
-      <div className="flex-grow space-y-3">
+      <div className="flex-grow space-y-4">
         <div className="flex items-center">
           <SubHeading title="Created by" />
+          <UserAvatarWithName
+            size="sm"
+            username={author.name}
+            image={author.image}
+          />
+        </div>
 
-          <UserAvatarWithName username={author.name} image={author.image} />
-        </div>
-        <div className="mb-2 flex items-center text-xs">
-          <SubHeading title="Created At" />
-          <div>{format(new Date(createdAt), 'dd, LLL yyyy')}</div>
-        </div>
-        <div className="mb-2 flex">
+        <div className="flex items-center">
           <SubHeading title="Tags" />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {tags.map((tag) => (
-              <Badge name={tag.name} key={tag.name} />
+              <Badge name={tag.name} key={tag.name} size="sm" />
             ))}
           </div>
         </div>
-        <div className="mb-2 flex items-center text-xs">
+        <div className="flex items-center text-xs">
           <SubHeading title="Category" />
           <div>{capLetter(type)}</div>
         </div>
@@ -122,46 +121,13 @@ const Bookmark = ({ bookmark, isOwner, hasLiked }: BookmarkProps) => {
   )
 }
 
-export default Bookmark
+export default SeedMark
 
 const UpvoteDownVote = () => {
   return (
     <div className="flex gap-2 lg:gap-4">
       <UpVoteIcon />
       <DownVoteIcon />
-    </div>
-  )
-}
-
-export const UserAvatarWithName = ({
-  username,
-  image,
-}: {
-  username: string
-  image: string
-}) => {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="text-xs font-semibold">{username}</div>
-      <UserAvatar username={username} image={image} />
-    </div>
-  )
-}
-
-export const SubHeading = ({
-  title,
-  hasMargin = true,
-}: {
-  title: string
-  hasMargin?: boolean
-}) => {
-  return (
-    <div
-      className={`${
-        hasMargin ? 'mr-8' : 'm-0'
-      }  text-xs text-gray-500 dark:text-[#5b5b5b]`}
-    >
-      {title}
     </div>
   )
 }

@@ -8,11 +8,23 @@ export type ButtonLinkProps = {
   children: React.ReactNode
   openNewTab?: boolean
   className?: string
+  size?: 'sm' | 'md' | 'lg'
   nextLinkProps?: Omit<LinkProps, 'href'>
 } & React.ComponentPropsWithRef<'a'>
 
 const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
-  ({ children, href, openNewTab, className, nextLinkProps, ...rest }, ref) => {
+  (
+    {
+      children,
+      href,
+      openNewTab,
+      className,
+      nextLinkProps,
+      size = 'md',
+      ...rest
+    },
+    ref
+  ) => {
     const isNewTab =
       openNewTab !== undefined
         ? openNewTab
@@ -41,7 +53,11 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         rel="noopener noreferrer"
         href={href}
         {...rest}
-        className={cn('cursor-newtab', className)}
+        className={cn('cursor-newtab', className, {
+          'text-sm': size === 'sm',
+          'text-base': size === 'md',
+          'text-lg': size === 'lg',
+        })}
       >
         {children}
       </a>

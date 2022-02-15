@@ -1,15 +1,26 @@
-import { useMarkFormModalStore } from '@/lib/store/modal'
 import { Dialog } from '@headlessui/react'
+import { LoadingIcon } from './icons'
 
-const Modal: React.FC = ({ children }) => {
-  const { isModalOpen, closeModal, title } = useMarkFormModalStore()
+type ModalProps = {
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  isLoading?: boolean
+}
 
+const Modal: React.FC<ModalProps> = ({
+  children,
+  isOpen,
+  onClose,
+  title,
+  isLoading,
+}) => {
   return (
     <Dialog
-      open={isModalOpen}
+      open={isOpen}
       as="div"
       className="fixed inset-0 z-10 overflow-y-auto"
-      onClose={closeModal}
+      onClose={onClose}
     >
       <div className="min-h-screen px-4 text-center">
         <Dialog.Overlay className="fixed inset-0 bg-black/70" />
@@ -26,7 +37,15 @@ const Modal: React.FC = ({ children }) => {
             {title}
           </Dialog.Title>
 
-          <div className="mt-8">{children}</div>
+          <div className="relative mt-8 min-h-[50vh]">
+            {isLoading ? (
+              <div className="absolute h-full w-full translate-y-1/2 translate-x-1/2 justify-center">
+                <LoadingIcon />
+              </div>
+            ) : (
+              children
+            )}
+          </div>
         </div>
       </div>
     </Dialog>

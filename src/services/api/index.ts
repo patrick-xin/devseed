@@ -87,6 +87,11 @@ export const getTags = async () => {
   return data.json()
 }
 
+export const getPopularTags = async () => {
+  const data = await fetch(`/api/m/tag/popular`)
+  return data.json()
+}
+
 export const getUser = async (): Promise<User> => {
   const data = await fetch(`/api/me`)
   return data.json()

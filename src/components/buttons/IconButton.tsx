@@ -1,5 +1,5 @@
 import React from 'react'
-import { LoadingIcon } from './icons'
+import { LoadingIcon } from '../icons'
 
 type IconButtonProps = {
   children: React.ReactNode

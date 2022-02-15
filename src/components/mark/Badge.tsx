@@ -11,18 +11,22 @@ enum BadgeVariant {
 type BadgeProps = {
   variant?: keyof typeof BadgeVariant
   name: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
-const Badge = ({ name, variant = 'default' }: BadgeProps) => {
+const Badge = ({ name, variant = 'default', size = 'md' }: BadgeProps) => {
   return (
     <Link href={`/m/c/${name}`}>
       <a
-        className={cn('w-fit rounded-md py-0.5 px-2 text-xs dark:text-white', [
+        className={cn('inline-block w-fit rounded-md text-xs dark:text-white', [
           variant === 'purple' && ['bg-purple-500'],
           variant === 'green' && ['bg-green-500'],
           variant === 'yellow' && ['bg-yellow-500'],
           variant === 'default' && ['bg-black/10 dark:bg-white/10'],
           variant === 'blue' && ['bg-blue-500'],
+          size === 'sm' && ['py-0.5 px-2'],
+          size === 'md' && ['py-2 px-2.5'],
+          size === 'lg' && ['py-2.5 px-3'],
         ])}
       >
         {name}

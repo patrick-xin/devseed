@@ -2,16 +2,20 @@ import { EditIcon } from '@/components/icons'
 import BasicLayout from '@/components/layout/BasicLayout'
 import { useUser } from '@/lib/hooks'
 import { useToggle } from '@/hooks'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+import { IconButton } from '@/components/buttons'
 
 const Dashboard = () => {
   const { user } = useUser()
+  console.log(user)
 
   if (!user) return <div>loading...</div>
   return (
     <BasicLayout>
       <div>
         <div>
-          <h1>Marks I&apos;ve created</h1>
+          <h1 className="pb-4 lg:text-4xl">Marks I&apos;ve created</h1>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-4">
             {user.marks.map((mark) => (
               <PersonalBookmark
@@ -25,10 +29,10 @@ const Dashboard = () => {
           </div>
         </div>
         <h1>Marks I&apos;ve collected</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-3">
-          {user.collection.length === 0
+        {/* <div className="grid grid-cols-1 lg:grid-cols-3">
+          {user.likes.length === 0
             ? "havn't collected"
-            : user.collection.map((c) => (
+            : user.likes.map((c) => (
                 <PersonalBookmark
                   key={c.mark.id}
                   title={c.mark.title}
@@ -37,7 +41,7 @@ const Dashboard = () => {
                   id={c.mark.id}
                 />
               ))}
-        </div>
+        </div> */}
       </div>
     </BasicLayout>
   )
@@ -56,12 +60,11 @@ const PersonalBookmark = ({ title, note, link }: PersonalBookmarkProps) => {
   const [show, setShow] = useToggle()
   return (
     <div className="max-w-md">
-      <div className="w-full space-y-4 rounded-lg border bg-violet-600/10 p-4 dark:border-white/10 lg:p-6">
+      <div className="min-h-[15rem] w-full space-y-4 rounded-lg border p-4 dark:border-white/10 lg:p-6">
         <div className="flex w-full">
           <div className="w-full space-y-2">
             <div className="flex items-start justify-between">
               <h3 className="text-xl font-bold">{title}</h3>
-              <EditIcon />
             </div>
 
             <a
@@ -74,7 +77,12 @@ const PersonalBookmark = ({ title, note, link }: PersonalBookmarkProps) => {
             </a>
           </div>
         </div>
-
+        <div className="flex items-center gap-2">
+          <EditIcon />
+          <IconButton>
+            <RiDeleteBin6Line className="text-red-500" />
+          </IconButton>
+        </div>
         <button
           onClick={() => {
             setShow()

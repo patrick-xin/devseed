@@ -30,7 +30,7 @@ type FormValues = {
 
 const EditPage = () => {
   const router = useRouter()
-  const { mark, isLoading } = useUserMark(router.query.id as string)
+  const { mark, isLoadingMark } = useUserMark(router.query.id as string)
   const { tags } = useTags()
 
   const [selected, setSelected] = useState([])
@@ -65,7 +65,7 @@ const EditPage = () => {
     })
   }
 
-  if (isLoading) return <div>loading</div>
+  if (isLoadingMark) return <div>loading</div>
   return (
     <FormLayout title="Edit Mark">
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>

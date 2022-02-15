@@ -1,5 +1,4 @@
-import React from 'react'
-import IconButton from '../IconButton'
+import { IconButton } from '../buttons'
 
 const UpVote = () => {
   return (

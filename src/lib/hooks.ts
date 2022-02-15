@@ -1,7 +1,9 @@
+import { Tag } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import {
   createMark,
+  getPopularTags,
   getTags,
   getUser,
   getUserMark,
@@ -11,11 +13,20 @@ import {
 import { useMarkFormModalStore } from './store/modal'
 import { useToastStore } from './store/toast'
 
-export const useTags = () => {
-  const { data } = useQuery(`/api/m/tag`, getTags)
+export const usePopularTags = () => {
+  const { data, isLoading } = useQuery<Tag[]>(`/api/m/tag/like`, getPopularTags)
 
   return {
-    isLoading: !data,
+    isLoadingPopularTags: isLoading,
+    populatTags: data,
+  }
+}
+
+export const useTags = () => {
+  const { data, isLoading } = useQuery(`/api/m/tag`, getTags)
+
+  return {
+    isLoadingTags: isLoading,
     tags: data,
   }
 }
@@ -52,11 +63,11 @@ export const useUserMarks = () => {
 }
 
 export const useUserMark = (id: string) => {
-  const { data } = useQuery(['mark', id], () => getUserMark(id))
+  const { data, isLoading } = useQuery(['mark', id], () => getUserMark(id))
 
   return {
     mark: data,
-    isLoading: !data,
+    isLoadingMark: isLoading,
   }
 }
 

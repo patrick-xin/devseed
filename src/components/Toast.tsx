@@ -1,7 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useToastStore } from '@/lib/store/toast'
-import IconButton from './IconButton'
+
 import { CloseIcon } from './icons'
+import { IconButton } from './buttons'
+
 const toastTypes = {
   success: 'text-green-700 bg-primary',
   error: 'bg-red-500',
