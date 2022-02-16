@@ -3,18 +3,21 @@ import { useSession } from 'next-auth/react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import {
   createMark,
+  downvoteMark,
+  getMark,
   getPopularTags,
   getTags,
   getUser,
   getUserMark,
   likeMark,
   updateMark,
+  upvoteMark,
 } from 'services/api'
 import { useMarkFormModalStore } from './store/modal'
 import { useToastStore } from './store/toast'
 
 export const usePopularTags = () => {
-  const { data, isLoading } = useQuery<Tag[]>(`/api/m/tag/like`, getPopularTags)
+  const { data, isLoading } = useQuery<Tag[]>(`popularTags`, getPopularTags)
 
   return {
     isLoadingPopularTags: isLoading,
@@ -23,7 +26,7 @@ export const usePopularTags = () => {
 }
 
 export const useTags = () => {
-  const { data, isLoading } = useQuery(`/api/m/tag`, getTags)
+  const { data, isLoading } = useQuery(`tags`, getTags)
 
   return {
     isLoadingTags: isLoading,
@@ -44,26 +47,24 @@ export const useUser = () => {
   }
 }
 
-export const useUserLikes = () => {
+export const useUserPreference = () => {
   const { data: session } = useSession()
   const { data } = useQuery('user', getUser, {
     enabled: Boolean(session),
-    select: (data) => data.likes.map((l) => l.markId),
+    select: (data) => {
+      const marks = data.marks.map((m) => m.id)
+      const collections = data.collection.map((c) => c.mark[0].id)
+      const likes = data.like.map((l) => l.markId)
+      return { marks, collections, likes }
+    },
   })
-  return { userLikes: data }
-}
-
-export const useUserMarks = () => {
-  const { data: session } = useSession()
-  const { data } = useQuery('user', getUser, {
-    enabled: Boolean(session),
-    select: (data) => data.marks.map((m) => m.id),
-  })
-  return { userMarks: data }
+  return { userPreference: data }
 }
 
 export const useUserMark = (id: string) => {
-  const { data, isLoading } = useQuery(['mark', id], () => getUserMark(id))
+  const { data, isLoading } = useQuery(['mark', id], () => getUserMark(id), {
+    enabled: !!id,
+  })
 
   return {
     mark: data,
@@ -105,8 +106,9 @@ export const useEditMark = () => {
   const queryClient = useQueryClient()
   const { closeModal } = useMarkFormModalStore()
   const { mutate, isLoading } = useMutation(updateMark, {
-    onSuccess: () => {
+    onSuccess: (_, { id }) => {
       queryClient.invalidateQueries('marks')
+      queryClient.invalidateQueries(['mark', id])
       closeModal()
       toast.success('Mark updated', 'topRight', 'fadeLeft')
     },
@@ -114,5 +116,36 @@ export const useEditMark = () => {
   return {
     editMark: mutate,
     isLoading,
+  }
+}
+
+export const useUpvoteMark = () => {
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation((id: string) => upvoteMark(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('user')
+      queryClient.invalidateQueries('marks')
+    },
+  })
+  return { upvoteMark: mutate, isLoading }
+}
+
+export const useDownvoteMark = () => {
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation((id: string) => downvoteMark(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('user')
+      queryClient.invalidateQueries('marks')
+    },
+  })
+  return { downvoteMark: mutate, isLoading }
+}
+
+export const useGetMark = (id: string) => {
+  const { data, isLoading } = useQuery(['mark', id], () => getMark(id))
+
+  return {
+    mark: data,
+    isLoadingMark: isLoading,
   }
 }

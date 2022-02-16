@@ -17,7 +17,7 @@ const IconButton = React.forwardRef<Ref, IconButtonProps>(
         ref={ref}
         type="button"
         disabled={disabled}
-        className="rounded-lg bg-black/10 p-2 transition-colors ease-linear dark:bg-white/10 dark:hover:bg-white/20"
+        className="rounded-lg bg-black/10 p-2 transition-colors ease-linear dark:bg-white/10 dark:hover:bg-white/20 dark:disabled:cursor-not-allowed dark:disabled:bg-white/10"
         {...rest}
       >
         {isLoading ? <LoadingIcon /> : children}

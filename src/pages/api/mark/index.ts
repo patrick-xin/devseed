@@ -30,7 +30,8 @@ handler.get(async ({ db, query }, res) => {
         url: true,
         title: true,
         type: true,
-        _count: { select: { likes: true, comments: true } },
+        like: true,
+        _count: { select: { collection: true, comments: true, like: true } },
       },
     })
 

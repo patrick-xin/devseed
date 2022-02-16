@@ -11,24 +11,26 @@ handler.use(middleware)
 
 handler.use(authHandler)
 
-handler.patch(async ({ db, user, query }, res) => {
+handler.patch(async ({ db, query }, res) => {
   const id = query.id as string
 
   try {
-    await db.user.update({
-      where: { id: user.id },
+    const likeId = await db.like.findFirst({
+      where: { markId: id },
+      select: { id: true },
+    })
+
+    await db.mark.update({
+      where: { id },
       data: {
-        collection: {
-          create: {
-            mark: { connect: { id } },
-            markId: id,
-          },
+        like: {
+          delete: { id: likeId?.id },
         },
       },
     })
 
     res.status(200).json({
-      message: 'Mark has been added to the collection.',
+      message: 'Upvoted!',
     })
   } catch (error) {
     res.status(500).json({

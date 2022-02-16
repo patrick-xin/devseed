@@ -18,14 +18,8 @@ handler.get(async ({ db, user }, res) => {
       image: true,
       name: true,
       marks: true,
-      likes: { select: { mark: true } },
-      collection: {
-        select: {
-          mark: {
-            select: { url: true, id: true, title: true, description: true },
-          },
-        },
-      },
+      collection: { select: { mark: true, createdAt: true } },
+      like: { select: { markId: true } },
     },
   })
 

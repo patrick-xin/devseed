@@ -3,36 +3,34 @@ import Link from 'next/link'
 import { SubHeading, UserAvatarWithName } from '.'
 import Badge from './Badge'
 import { IconButton } from '@/components/buttons'
-import {
-  ChatIcon,
-  DownVoteIcon,
-  EditIcon,
-  HeartIcon,
-  HeartSolidIcon,
-  UpVoteIcon,
-} from '../icons'
-
-import { useLikeMark } from '@/lib/hooks'
+import { ChatIcon, EditIcon, HeartSolidIcon } from '../icons'
+import { BiUpvote, BiDownvote } from 'react-icons/bi'
+import { useDownvoteMark, useLikeMark, useUpvoteMark } from '@/lib/hooks'
 import { useMarkFormModalStore } from '@/lib/store/modal'
 
 import { capLetter } from 'uitls'
 import type { Mark } from '@/lib/types'
+import { FaSeedling } from 'react-icons/fa'
 
 type SeedMarkProps = {
   bookmark: Mark
   isOwner: boolean | undefined
   hasLiked: boolean | undefined
+  hasVoted: boolean | undefined
 }
 
-const SeedMark = ({ bookmark, isOwner, hasLiked }: SeedMarkProps) => {
+const SeedMark = ({ bookmark, isOwner, hasLiked, hasVoted }: SeedMarkProps) => {
   const { title, author, tags, url, description, type, _count, id } = bookmark
+  const { upvoteMark } = useUpvoteMark()
+  const { downvoteMark } = useDownvoteMark()
   const { openModal } = useMarkFormModalStore()
   const { likeMark } = useLikeMark()
+
   const renderLikeIcon = () => {
     if (!isOwner && !hasLiked)
       return (
         <IconButton onClick={() => likeMark(id)}>
-          <HeartIcon />
+          <FaSeedling className="text-green-500" />
         </IconButton>
       )
 
@@ -63,7 +61,7 @@ const SeedMark = ({ bookmark, isOwner, hasLiked }: SeedMarkProps) => {
           </div>
           <div className="flex items-center gap-1">
             <HeartSolidIcon />
-            <span className="text-xs">{_count.likes}</span>
+            <span className="text-xs">{_count.collection}</span>
           </div>
         </div>
       </header>
@@ -108,9 +106,24 @@ const SeedMark = ({ bookmark, isOwner, hasLiked }: SeedMarkProps) => {
       </div>
 
       <div className="flex flex-1 items-center justify-between pt-4">
-        <div>
-          <UpvoteDownVote />
+        <div className="flex items-center gap-3">
+          <span>{_count.like}</span>
+          <div className="flex gap-2">
+            <IconButton
+              onClick={() => upvoteMark(id)}
+              disabled={hasVoted || isOwner}
+            >
+              <BiUpvote className={`${!hasVoted && 'text-green-600'}`} />
+            </IconButton>
+            <IconButton
+              onClick={() => downvoteMark(id)}
+              disabled={!hasVoted || isOwner}
+            >
+              <BiDownvote className={`${hasVoted && 'text-green-600'}`} />
+            </IconButton>
+          </div>
         </div>
+
         {isOwner && (
           <button onClick={() => openModal({ type: 'edit', markId: id })}>
             <EditIcon />
@@ -122,12 +135,3 @@ const SeedMark = ({ bookmark, isOwner, hasLiked }: SeedMarkProps) => {
 }
 
 export default SeedMark
-
-const UpvoteDownVote = () => {
-  return (
-    <div className="flex gap-2 lg:gap-4">
-      <UpVoteIcon />
-      <DownVoteIcon />
-    </div>
-  )
-}

@@ -14,34 +14,31 @@ import { Button, ButtonLink } from '@/components/buttons'
 import { useMarkFormModalStore } from '@/lib/store/modal'
 
 const ProfileButton = () => {
-  const { session } = useUser()
+  const { user } = useUser()
   const { setTheme, theme } = useTheme()
   const { openModal } = useMarkFormModalStore()
 
   return (
     <div>
       <Menu as="div" className="relative z-100">
-        <Menu.Button className="justify-center rounded-full border border-white/10 p-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-opacity-75">
-          {session && (
-            <UserAvatar
-              size="md"
-              username={session.user!.name!}
-              image={session.user!.image!}
-            />
+        <Menu.Button className="justify-center rounded-full text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-opacity-75">
+          {user && (
+            <UserAvatar size="md" username={user.name} image={user.image} />
           )}
         </Menu.Button>
 
         <div>
-          <Menu.Items className="absolute right-0 mt-2 w-40 origin-top-right rounded-md border border-white/10 bg-gray-50 p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-primary lg:-right-24 lg:w-72">
-            <div className="flex flex-col gap-1.5 px-1 py-1 text-center">
+          <Menu.Items className="absolute right-0 mt-2 w-40 origin-top-right rounded-md border border-white/10 bg-gray-50 p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-primary lg:-right-24 lg:w-60">
+            <div className="py-2 text-center font-semibold">{user?.name}</div>
+            <div className="flex flex-col gap-1.5 px-1 py-1 text-center text-sm">
               <Menu.Item>
                 {({ active }) => (
                   <ButtonLink
                     href="/mark"
-                    className="inline-flex w-full items-center rounded-sm border border-white/10"
+                    className="inline-flex w-full items-center border border-black/10 bg-gray-50 dark:border-white/10 dark:bg-primary dark:hover:bg-white/10"
                   >
                     <MdOutlineExplore
-                      className={cn('mr-9 -ml-1 h-7 w-7', {
+                      className={cn('mr-9 h-6 w-6', {
                         'text-purple-500': active,
                       })}
                     />
@@ -51,13 +48,16 @@ const ProfileButton = () => {
               </Menu.Item>
               <Menu.Item>
                 {({ active }) => (
-                  <Button onClick={() => openModal({ type: 'create' })}>
+                  <Button
+                    size="sm"
+                    onClick={() => openModal({ type: 'create' })}
+                  >
                     <FaSeedling
                       className={cn('mr-8 h-5 w-5', {
                         'text-green-500': active,
                       })}
                     />
-                    <span>Create</span>
+                    <span className="text-sm">Create</span>
                   </Button>
                 )}
               </Menu.Item>
@@ -72,7 +72,7 @@ const ProfileButton = () => {
                           'text-yellow-500': active,
                         })}
                       />
-                      <span>Set light mode</span>
+                      <span className="text-sm">Set light mode</span>
                     </Button>
                   ) : (
                     <Button onClick={() => setTheme('dark')}>
@@ -81,7 +81,7 @@ const ProfileButton = () => {
                           'text-blue-500': active,
                         })}
                       />
-                      <span>Set dark mode</span>
+                      <span className="text-sm">Set dark mode</span>
                     </Button>
                   )
                 }
@@ -94,7 +94,7 @@ const ProfileButton = () => {
                         'text-red-400': active,
                       })}
                     />
-                    <span>Logout</span>
+                    <span className="text-sm">Logout</span>
                   </Button>
                 )}
               </Menu.Item>

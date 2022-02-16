@@ -16,7 +16,7 @@ handler.get(async ({ db, query }, res) => {
 
   const data = await db.mark.findUnique({
     where: { id },
-    include: { tags: true },
+    include: { tags: true, author: true },
   })
   const category = data?.tags.map((d) => ({ label: d.name, value: d.name }))
   res.status(200).json({ ...data, category })
@@ -37,7 +37,6 @@ handler.delete(async ({ db, query }, res) => {
 
 handler.patch(async ({ db, user, query, body }, res) => {
   const id = query.id as string
-  console.log(id)
 
   const { title, markLink, description, tags, type } = body
 
@@ -45,7 +44,7 @@ handler.patch(async ({ db, user, query, body }, res) => {
     where: { name: c.value },
     create: { name: c.value },
   }))
-  console.log(categoryData)
+
   try {
     await db.mark.update({
       where: { id },
@@ -65,7 +64,9 @@ handler.patch(async ({ db, user, query, body }, res) => {
       message: 'Mark has been updated',
     })
   } catch (error) {
-    console.log(error)
+    res.status(500).json({
+      message: 'Action could not complete, try again later',
+    })
   }
 })
 

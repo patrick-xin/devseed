@@ -1,10 +1,13 @@
 import { forwardRef } from 'react'
+import cn from 'classnames'
+
 import { LoadingIcon } from '../icons'
 
 type ButtonProps = {
   children: React.ReactNode
   className?: string
   variant?: 'primary' | 'red' | 'green'
+  size?: 'sm' | 'md' | 'lg'
   type?: 'button' | 'submit'
   isLoading?: boolean
 } & React.ComponentPropsWithRef<'button'>
@@ -25,6 +28,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       disabled: buttonDisabled,
       variant = 'primary',
       isLoading,
+      size = 'md',
       ...rest
     },
     ref
@@ -34,11 +38,18 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         disabled={disabled}
-        className={`${
-          className ? className : ''
-        } inline-flex items-center gap-2 rounded-md p-2 text-center text-sm shadow-md transition-colors ease-linear lg:px-3 lg:text-base ${
-          variants[variant]
-        }`}
+        className={cn(
+          `${
+            className ? className : ''
+          } inline-flex items-center gap-2 rounded-md p-2 text-center shadow-md transition-colors ease-linear lg:px-3 lg:text-base ${
+            variants[variant]
+          }`,
+          {
+            'text-sm': size === 'sm',
+            'text-base': size === 'md',
+            'text-lg': size === 'lg',
+          }
+        )}
         type={type}
         {...rest}
       >

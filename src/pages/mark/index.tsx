@@ -7,10 +7,10 @@ import {
 } from 'react-query'
 import { Listbox } from '@headlessui/react'
 
-import { SeedMark } from '@/components/mark'
+import { MarkLoader, SeedMark } from '@/components/mark'
 import { CheckIcon, LoadingIcon, SelectorIcon } from '@/components/icons'
 
-import { useUserLikes, useUserMarks } from '@/lib/hooks'
+import { useUserPreference } from '@/lib/hooks'
 import { API_BASE_URL, getMarks } from '@/services/api'
 
 import type { Mark } from '@/lib/types'
@@ -31,9 +31,9 @@ const options = ['asc', 'desc']
 
 export default function MarksPage({ initialData }: MarksPageProps) {
   const { inView, ref } = useInView()
-  const { userMarks } = useUserMarks()
-  const { userLikes } = useUserLikes()
+
   const [order, setOrder] = useState(options[1])
+  const { userPreference } = useUserPreference()
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<GroupResponse>(
@@ -57,7 +57,7 @@ export default function MarksPage({ initialData }: MarksPageProps) {
     //eslint-disable-next-line
   }, [inView])
 
-  if (!data)
+  if (!data || !initialData)
     return (
       <div>
         <LoadingIcon />
@@ -111,21 +111,26 @@ export default function MarksPage({ initialData }: MarksPageProps) {
             </div>
           </Listbox>
         </div>
-        {data?.pages?.map((group, i) => (
-          <div key={i} className="mx-auto grid grid-cols-1 md:grid-cols-2">
-            {group.marks.map((mark) => (
-              <SeedMark
-                key={mark.id}
-                bookmark={mark}
-                isOwner={userMarks?.includes(mark.id)}
-                hasLiked={userLikes?.includes(mark.id)}
-              />
-            ))}
-          </div>
-        ))}
+
+        {data &&
+          data.pages?.map((group, i) => (
+            <div key={i} className="mx-auto grid grid-cols-1 lg:grid-cols-2">
+              {group?.marks?.map((mark) => (
+                <SeedMark
+                  key={mark.id}
+                  bookmark={mark}
+                  isOwner={userPreference?.marks?.includes(mark.id)}
+                  hasLiked={userPreference?.collections?.includes(mark.id)}
+                  hasVoted={userPreference?.likes.includes(mark.id)}
+                />
+              ))}
+            </div>
+          ))}
         {isFetchingNextPage && (
-          <div className="flex w-full justify-center">
-            <LoadingIcon />
+          <div className="grid w-full grid-cols-2 gap-10 px-6">
+            <MarkLoader />
+            <MarkLoader />
+            {/* <LoadingIcon /> */}
           </div>
         )}
         <div
@@ -141,6 +146,14 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     const initialData = await getMarks({ pageParam: '' })
 
+    if (initialData.message) {
+      return {
+        redirect: {
+          destination: '/500',
+          permanent: false,
+        },
+      }
+    }
     return {
       props: {
         initialData,

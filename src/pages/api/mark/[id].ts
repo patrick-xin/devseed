@@ -11,16 +11,17 @@ handler.use(middleware)
 
 handler.get(async ({ db, query }, res) => {
   const id = query.id as string
-  const mark = await db.mark.findUnique({
+  const data = await db.mark.findUnique({
     where: { id },
-
     include: {
-      author: { select: { image: true, name: true } },
-      tags: { select: { name: true } },
+      author: true,
+      tags: true,
+      comments: true,
     },
   })
+  const category = data?.tags.map((d) => ({ label: d.name, value: d.name }))
 
-  res.status(200).json(mark)
+  res.status(200).json({ ...data, category })
 })
 
 export default handler

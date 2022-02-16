@@ -1,4 +1,4 @@
-import { User } from '@/lib/types'
+import { Mark, User } from '@/lib/types'
 
 const dev = process.env.NODE_ENV !== 'production'
 
@@ -63,8 +63,8 @@ export const deleteMark = async (id: string) => {
   return data.json()
 }
 
-export const getMark = async (id: string) => {
-  const data = await fetch(`/api/mark/${id}`)
+export const getMark = async (id: string): Promise<Mark> => {
+  const data = await fetch(`${API_BASE_URL}/api/mark/${id}`)
   return data.json()
 }
 
@@ -77,6 +77,20 @@ export const getMarks = async ({ pageParam = '', order = 'desc' }) => {
 
 export const likeMark = async (id: string) => {
   const data = await fetch(`/api/m/${id}/like`, {
+    method: 'PATCH',
+  })
+  return data.json()
+}
+
+export const upvoteMark = async (id: string) => {
+  const data = await fetch(`/api/m/${id}/upvote`, {
+    method: 'PATCH',
+  })
+  return data.json()
+}
+
+export const downvoteMark = async (id: string) => {
+  const data = await fetch(`/api/m/${id}/downvote`, {
     method: 'PATCH',
   })
   return data.json()

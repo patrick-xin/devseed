@@ -64,7 +64,7 @@ const MarkForm = () => {
         description: data.description,
         title: data.title,
         markLink: data.url,
-        type: markType,
+        type: markType.toUpperCase(),
       })
     }
     if (modalType === 'edit') {
@@ -73,7 +73,7 @@ const MarkForm = () => {
         description: data.description,
         title: data.title,
         markLink: data.url,
-        type: markType,
+        type: markType.toUpperCase(),
         id: markId!,
       })
     }

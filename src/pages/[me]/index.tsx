@@ -7,7 +7,6 @@ import { IconButton } from '@/components/buttons'
 
 const Dashboard = () => {
   const { user } = useUser()
-  console.log(user)
 
   if (!user) return <div>loading...</div>
   return (
@@ -29,19 +28,19 @@ const Dashboard = () => {
           </div>
         </div>
         <h1>Marks I&apos;ve collected</h1>
-        {/* <div className="grid grid-cols-1 lg:grid-cols-3">
-          {user.likes.length === 0
+        <div className="grid grid-cols-1 lg:grid-cols-3">
+          {user.collection.length === 0
             ? "havn't collected"
-            : user.likes.map((c) => (
+            : user.collection.map((c) => (
                 <PersonalBookmark
-                  key={c.mark.id}
-                  title={c.mark.title}
-                  link={c.mark.url}
-                  note={c.mark.description}
-                  id={c.mark.id}
+                  key={c.mark[0].id}
+                  title={c.mark[0].title}
+                  link={c.mark[0].url}
+                  note={c.mark[0].description}
+                  id={c.mark[0].id}
                 />
               ))}
-        </div> */}
+        </div>
       </div>
     </BasicLayout>
   )

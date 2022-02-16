@@ -15,20 +15,20 @@ handler.patch(async ({ db, user, query }, res) => {
   const id = query.id as string
 
   try {
-    await db.user.update({
-      where: { id: user.id },
+    await db.mark.update({
+      where: { id },
       data: {
-        collection: {
+        like: {
           create: {
-            mark: { connect: { id } },
             markId: id,
+            userId: user.id,
           },
         },
       },
     })
 
     res.status(200).json({
-      message: 'Mark has been added to the collection.',
+      message: 'Upvoted!',
     })
   } catch (error) {
     res.status(500).json({
