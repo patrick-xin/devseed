@@ -1,5 +1,6 @@
 import { Menu } from '@headlessui/react'
 import { signOut } from 'next-auth/react'
+import { useTheme } from 'next-themes'
 import cn from 'classnames'
 import { MdOutlineExplore } from 'react-icons/md'
 import { FaSeedling } from 'react-icons/fa'
@@ -7,10 +8,9 @@ import { BiLogOutCircle } from 'react-icons/bi'
 import { BsSunFill, BsMoonFill } from 'react-icons/bs'
 
 import UserAvatar from './UserAvatar'
+import { Button, ButtonLink } from '@/components/buttons'
 
 import { useUser } from '@/lib/hooks'
-import { useTheme } from 'next-themes'
-import { Button, ButtonLink } from '@/components/buttons'
 import { useMarkFormModalStore } from '@/lib/store/modal'
 
 const ProfileButton = () => {
@@ -29,7 +29,9 @@ const ProfileButton = () => {
 
         <div>
           <Menu.Items className="absolute right-0 mt-2 w-40 origin-top-right rounded-md border border-white/10 bg-gray-50 p-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-primary lg:-right-24 lg:w-60">
-            <div className="py-2 text-center font-semibold">{user?.name}</div>
+            <div className="py-2 text-center font-semibold">
+              Hi, <span className="italic">{user?.name}</span>
+            </div>
             <div className="flex flex-col gap-1.5 px-1 py-1 text-center text-sm">
               <Menu.Item>
                 {({ active }) => (
@@ -38,7 +40,7 @@ const ProfileButton = () => {
                     className="inline-flex w-full items-center border border-black/10 bg-gray-50 dark:border-white/10 dark:bg-primary dark:hover:bg-white/10"
                   >
                     <MdOutlineExplore
-                      className={cn('mr-9 h-6 w-6', {
+                      className={cn('mr-7 h-6 w-6', {
                         'text-purple-500': active,
                       })}
                     />
@@ -57,7 +59,7 @@ const ProfileButton = () => {
                         'text-green-500': active,
                       })}
                     />
-                    <span className="text-sm">Create</span>
+                    <span className="inline-block text-sm">Create</span>
                   </Button>
                 )}
               </Menu.Item>

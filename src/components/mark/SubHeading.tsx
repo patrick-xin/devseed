@@ -11,12 +11,12 @@ const SubHeading = ({
 }) => {
   return (
     <div
-      className={cn('text-xs text-gray-500 dark:text-[#5b5b5b]', {
+      className={cn('text-gray-500 dark:text-[#5b5b5b]', {
         'mr-8': hasMargin,
         'm-0': !hasMargin,
         'text-xs': size === 'sm',
-        'text-base': size === 'md',
-        'text-lg': size === 'lg',
+        'text-sm lg:text-base': size === 'md',
+        'text-base lg:text-lg': size === 'lg',
       })}
     >
       {title}

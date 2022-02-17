@@ -9,7 +9,6 @@ type MarkFormModalState = {
   openModal: ({ type, markId }: { type: ModalType; markId?: string }) => void
   closeModal: () => void
   title: string
-  buttonTitle: string
   markId?: string
   markType: string
   selectedTags: []
@@ -20,7 +19,6 @@ type MarkFormModalState = {
 export const useMarkFormModalStore = create<MarkFormModalState>((set) => ({
   isModalOpen: false,
   title: '',
-  buttonTitle: '',
   modalType: undefined,
   openModal: ({ type, markId }: { type: ModalType; markId?: string }) => {
     if (type === 'create') {
@@ -28,7 +26,6 @@ export const useMarkFormModalStore = create<MarkFormModalState>((set) => ({
         isModalOpen: true,
         modalType: 'create',
         title: 'Creare a Mark',
-        buttonTitle: 'Create',
       })
     }
     if (type === 'edit') {
@@ -36,7 +33,7 @@ export const useMarkFormModalStore = create<MarkFormModalState>((set) => ({
         isModalOpen: true,
         modalType: 'edit',
         title: 'Update Mark',
-        buttonTitle: 'Update',
+
         markId: markId,
       })
     }
@@ -46,7 +43,7 @@ export const useMarkFormModalStore = create<MarkFormModalState>((set) => ({
       isModalOpen: false,
       modalType: undefined,
       title: '',
-      buttonTitle: '',
+
       markId: '',
       selectedTags: [],
       markType: '',

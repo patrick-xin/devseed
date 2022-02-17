@@ -16,7 +16,11 @@ handler.get(async ({ db, query }, res) => {
 
   const data = await db.mark.findUnique({
     where: { id },
-    include: { tags: true, author: true },
+    include: {
+      tags: true,
+      author: true,
+      comments: { include: { user: { select: { name: true, image: true } } } },
+    },
   })
   const category = data?.tags.map((d) => ({ label: d.name, value: d.name }))
   res.status(200).json({ ...data, category })
@@ -25,14 +29,15 @@ handler.get(async ({ db, query }, res) => {
 handler.delete(async ({ db, query }, res) => {
   const id = query.id as string
 
-  const mark = await db.mark.delete({
+  await db.mark.delete({
     where: {
       id: id,
     },
-    select: { tags: true, title: true, url: true, description: true },
+    select: { comments: true },
+    //select: { tags: true, title: true, url: true, description: true },
   })
 
-  res.status(200).json(mark)
+  res.status(200).json({ messgae: 'Mark deleted.' })
 })
 
 handler.patch(async ({ db, user, query, body }, res) => {

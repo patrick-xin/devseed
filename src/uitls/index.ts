@@ -12,3 +12,17 @@ export const capLetters = (str: string) => {
 
   return result
 }
+
+export const calcTime = () => {
+  const today = new Date()
+  const curHr = today.getHours()
+  let result
+  if (curHr < 12) {
+    result = 'good morning'
+  } else if (curHr < 18) {
+    result = 'good afternoon'
+  } else {
+    result = 'good evening'
+  }
+  return result
+}

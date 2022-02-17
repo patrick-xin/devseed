@@ -16,7 +16,17 @@ handler.get(async ({ db, query }, res) => {
     include: {
       author: true,
       tags: true,
-      comments: true,
+      comments: {
+        orderBy: { createdAt: 'desc' },
+        include: {
+          user: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+      },
     },
   })
   const category = data?.tags.map((d) => ({ label: d.name, value: d.name }))

@@ -54,7 +54,7 @@ const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         href={href}
         {...rest}
         className={cn(
-          'cursor-newtab inline-block max-w-full break-words text-red-500',
+          'cursor-newtab inline-block max-w-full break-words',
           className,
           {
             'text-sm': size === 'sm',

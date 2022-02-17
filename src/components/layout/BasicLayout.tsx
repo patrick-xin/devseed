@@ -2,6 +2,7 @@ import React from 'react'
 import { Header } from '@/components/index'
 import NavTabs from '../NavTabs'
 import SidebarRight from '../sidebar/SidebarRight'
+import { Footer } from '../footer'
 
 type BasicLayoutProps = {
   children: React.ReactNode
@@ -17,6 +18,7 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
         <div>{children}</div>
 
         <SidebarRight />
+        <Footer />
       </div>
     </>
   )

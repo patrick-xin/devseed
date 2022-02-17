@@ -1,10 +1,18 @@
-import React from 'react'
+import cn from 'classnames'
 
-const LoadingIcon = () => {
+type LoadingIconProps = {
+  size?: 'sm' | 'md' | 'lg'
+}
+
+const LoadingIcon = ({ size = 'md' }: LoadingIconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="h-6 w-6 animate-spin fill-current text-white"
+      className={cn('animate-spin fill-current text-gray-700 dark:text-white', {
+        'h-6 w-6': size === 'md',
+        'h-8 w-8': size === 'lg',
+        'h-4 w-4': size === 'sm',
+      })}
       viewBox="0 0 24 24"
       stroke="currentColor"
       strokeWidth="2"

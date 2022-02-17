@@ -171,6 +171,7 @@ const MarkForm = () => {
       </div>
       <div className="mt-8 flex w-full justify-end gap-4">
         <Button
+          className="w-fit"
           variant="red"
           onClick={() => {
             closeModal()
@@ -180,7 +181,7 @@ const MarkForm = () => {
         >
           Cancle
         </Button>
-        <Button variant="green" type="submit">
+        <Button variant="green" type="submit" className="w-fit">
           {modalType === 'edit' ? 'Update' : 'Create'}
         </Button>
       </div>

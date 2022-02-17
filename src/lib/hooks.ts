@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import {
   createMark,
+  deleteMark,
   downvoteMark,
   getMark,
   getPopularTags,
@@ -10,9 +11,11 @@ import {
   getUser,
   getUserMark,
   likeMark,
+  submitComment,
   updateMark,
   upvoteMark,
 } from 'services/api'
+import { useConfirmModalStore } from './store/confirm-modal'
 import { useMarkFormModalStore } from './store/modal'
 import { useToastStore } from './store/toast'
 
@@ -148,4 +151,35 @@ export const useGetMark = (id: string) => {
     mark: data,
     isLoadingMark: isLoading,
   }
+}
+
+export const useSubmitComment = () => {
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation(
+    ({ id, content }: { id: string; content: string }) =>
+      submitComment({ id, content }),
+    {
+      onSuccess: (_, { id }) => {
+        queryClient.invalidateQueries(['mark', id])
+      },
+    }
+  )
+  return { submitComment: mutate, isSubmitting: isLoading }
+}
+
+export const useDeleteMark = () => {
+  const queryClient = useQueryClient()
+  const { toast } = useToastStore()
+  const { closeModal } = useConfirmModalStore()
+  const { mutate, isLoading } = useMutation((id: string) => deleteMark(id), {
+    onSuccess: (data) => {
+      console.log(data)
+
+      queryClient.invalidateQueries(['user'])
+      queryClient.invalidateQueries(['marks'])
+      closeModal()
+      toast.success('Mark deleted')
+    },
+  })
+  return { deleteMark: mutate, isDeleting: isLoading }
 }

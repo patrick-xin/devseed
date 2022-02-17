@@ -11,11 +11,22 @@ export type Mark = {
   _count: { collection: number; comments: number; like: number }
   createdAt: string
   type: string
+  comments: Comment[]
 }
 
 export type Collection = {
   createdAt: string
   mark: Mark[]
+}
+
+export type Comment = {
+  content: string
+  user: {
+    name: string
+    image: string
+  }
+  createdAt: string
+  id: string
 }
 
 export type User = {

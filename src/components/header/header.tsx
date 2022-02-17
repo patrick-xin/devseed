@@ -18,7 +18,15 @@ const Header = () => {
               <a>devShare</a>
             </Link>
           </li>
-
+          <li>
+            <ButtonLink
+              size="md"
+              href="/mark"
+              className="inline-flex w-full items-center border border-black/10 dark:border-white/10 dark:bg-primary dark:hover:bg-white/10"
+            >
+              Explore
+            </ButtonLink>
+          </li>
           <li className="mx-4">
             <SearchInput />
           </li>

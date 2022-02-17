@@ -6,6 +6,7 @@ type ModalProps = {
   onClose: () => void
   title: string
   isLoading?: boolean
+  description?: string
 }
 
 const Modal: React.FC<ModalProps> = ({

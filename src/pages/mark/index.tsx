@@ -34,6 +34,7 @@ export default function MarksPage({ initialData }: MarksPageProps) {
 
   const [order, setOrder] = useState(options[1])
   const { userPreference } = useUserPreference()
+  console.log(userPreference)
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<GroupResponse>(
@@ -59,7 +60,7 @@ export default function MarksPage({ initialData }: MarksPageProps) {
 
   if (!data || !initialData)
     return (
-      <div>
+      <div className="flex h-screen w-screen items-center justify-center overflow-hidden bg-gray-50 dark:bg-black/70">
         <LoadingIcon />
       </div>
     )

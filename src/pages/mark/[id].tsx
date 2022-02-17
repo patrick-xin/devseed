@@ -14,6 +14,7 @@ import { EditIcon } from '@/components/icons'
 import { useMarkFormModalStore } from '@/lib/store/modal'
 import { dehydrate, QueryClient } from 'react-query'
 import { getMark } from '@/services/api'
+import CommentSection from '@/components/comment/Comment'
 
 const DetailPage = ({ id }: { id: string }) => {
   const { user } = useUser()
@@ -25,7 +26,7 @@ const DetailPage = ({ id }: { id: string }) => {
   return (
     <BasicLayout>
       {mark && (
-        <div className="max-w-2xl space-y-4 p-4">
+        <div className="mx-auto max-w-2xl space-y-4 p-4">
           <div className="flex items-center justify-between">
             <h1 className="pb-4 lg:text-4xl">{capLetters(mark.title)}</h1>
             <div className="flex items-center gap-2">
@@ -36,18 +37,23 @@ const DetailPage = ({ id }: { id: string }) => {
                   <EditIcon />
                 </IconButton>
               )}
-
-              <UserAvatarWithName
-                size="md"
-                username={mark.author?.name}
-                image={mark.author?.image}
-              />
             </div>
           </div>
-          <div className="mb-2 flex items-center text-xs">
+          <div className="mb-2 flex items-center">
             <SubHeading title="Created At" />
-            <div>{format(new Date(mark.createdAt), 'dd, LLL yyyy')}</div>
+            <div className="text-sm">
+              {format(new Date(mark.createdAt), 'dd, LLL yyyy')}
+            </div>
           </div>
+          <div className="mb-2 flex items-center">
+            <SubHeading title="Created By" />
+            <UserAvatarWithName
+              size="sm"
+              username={mark.author?.name}
+              image={mark.author?.image}
+            />
+          </div>
+
           <div className="flex items-center">
             <SubHeading title="Link" />
             <div className="flex w-3/4 items-center gap-2">
@@ -74,45 +80,12 @@ const DetailPage = ({ id }: { id: string }) => {
           <p className="py-6 lg:text-xl">{mark.description}</p>
 
           <div>
-            <h3 className="pb-4 lg:text-xl">Comments (10)</h3>
-            <div className="space-y-4">
-              <div className="rounded-md border border-white/10 p-4">
-                <div className="flex justify-between">
-                  <UserAvatarWithName
-                    size="sm"
-                    username={mark.author?.name}
-                    image={mark.author?.image}
-                  />
-                  <div className="text-sm text-white/20">
-                    created at 2022-02-12
-                  </div>
-                </div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic,
-                  officia sint. Inventore sequi a eius possimus exercitationem
-                  eaque voluptates dignissimos architecto ipsum tempore debitis,
-                  ipsa facere. Cumque repudiandae dolore cum.
-                </p>
-              </div>
-              <div className="rounded-md border border-white/10 p-4">
-                <div className="flex justify-between">
-                  <UserAvatarWithName
-                    size="sm"
-                    username={mark.author.name}
-                    image={mark.author.image}
-                  />
-                  <div className="text-sm text-white/20">
-                    created at 2022-02-12
-                  </div>
-                </div>
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic,
-                  officia sint. Inventore sequi a eius possimus exercitationem
-                  eaque voluptates dignissimos architecto ipsum tempore debitis,
-                  ipsa facere. Cumque repudiandae dolore cum.
-                </p>
-              </div>
-            </div>
+            <h3 className="pb-4 lg:text-xl">
+              Comments ({mark.comments.length})
+            </h3>
+            {mark.comments && (
+              <CommentSection comments={mark.comments} id={mark.id} />
+            )}
           </div>
         </div>
       )}

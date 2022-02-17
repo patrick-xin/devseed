@@ -3,7 +3,9 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearch","referentialIntegrity"]
+   
+
 }
 
 datasource db {
@@ -61,7 +63,7 @@ model Mark {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   isPublished Boolean     @default(false)
-  comments    Comment[]
+  comments    Comment[] 
   author      User        @relation(fields: [authorId], references: [id])
   authorId    String
   description String
@@ -88,7 +90,7 @@ model Tag {
 
 model Comment {
   id        String   @id @default(cuid())
-  mark      Mark     @relation(fields: [markId], references: [id])
+  mark      Mark     @relation(fields: [markId], references: [id], onDelete: Cascade)
   markId    String
   createdAt DateTime @default(now())
   content   String

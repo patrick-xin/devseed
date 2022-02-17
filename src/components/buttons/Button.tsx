@@ -41,7 +41,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           `${
             className ? className : ''
-          } inline-flex items-center gap-2 rounded-md p-2 text-center shadow-md transition-colors ease-linear lg:px-3 lg:text-base ${
+          } inline-flex w-full items-center gap-2 rounded-md p-2 text-center shadow-md transition-colors ease-linear lg:px-3 lg:text-base ${
             variants[variant]
           }`,
           {
@@ -53,8 +53,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         type={type}
         {...rest}
       >
-        {isLoading && <LoadingIcon />}
-        {children}
+        {isLoading ? (
+          <LoadingIcon size={size} />
+        ) : (
+          <div className="flex items-center justify-start">{children}</div>
+        )}
       </button>
     )
   }
