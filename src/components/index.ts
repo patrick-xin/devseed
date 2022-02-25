@@ -6,3 +6,6 @@ export { default as ProfileButton } from './ProfileButton'
 
 export { default as Modal } from './Modal'
 export { default as NavTabs } from './NavTabs'
+export { default as Loading } from './Loading'
+export { default as HorizontalNav } from './HorizontalNav'
+export { default as GridContainer } from './GridContainer'

@@ -9,15 +9,34 @@ const handler = nc<Request, NextApiResponse>()
 
 handler.use(middleware)
 
+export declare const SortOrder: {
+  asc: 'asc'
+  desc: 'desc'
+}
+
 handler.get(async ({ db, query }, res) => {
   const limit = 6
 
   const cursor = (query.cursor as string) ?? ''
   const cursorObj = cursor === '' ? undefined : { id: cursor }
-  const order = query.order as 'asc' | 'desc'
+  let orderBy
+  const order = query.orderBy
+  if (order === 'newest') {
+    orderBy = { createdAt: SortOrder['desc'] }
+  }
+  if (order === 'comments') {
+    orderBy = { comments: { _count: SortOrder['desc'] } }
+  }
+  if (order === 'saved') {
+    orderBy = { collection: { _count: SortOrder['desc'] } }
+  }
+  if (order === 'liked') {
+    orderBy = { like: { _count: SortOrder['desc'] } }
+  }
+
   try {
     const marks = await db.mark.findMany({
-      orderBy: { createdAt: order },
+      orderBy,
       take: limit,
       skip: cursor == '' ? 0 : 1,
       cursor: cursorObj,

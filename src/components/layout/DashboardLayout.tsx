@@ -1,20 +1,19 @@
 import React from 'react'
+import AddFolderModal from '../dashboard/AddFolderModal'
 import DashboardNavs from '../dashboard/DashboardNavs'
-import { Footer } from '../footer'
+
 import Header from '../header/header'
 
 const DashboardLayout: React.FC = ({ children }) => {
   return (
-    <>
+    <div className="overflow-hidden">
       <Header />
-
-      <div className="relative mx-auto grid min-h-[calc(100vh-6rem)] grid-cols-[160px_1fr_120px] gap-10 px-6 md:mx-12 lg:pt-12">
-        <DashboardNavs />
-        <div>{children}</div>
-
-        <Footer />
-      </div>
-    </>
+      <DashboardNavs />
+      <main className="relative mx-auto min-h-[calc(100vh-6rem)] px-6 md:mx-16 lg:pl-[16rem] lg:pt-12">
+        {children}
+      </main>
+      <AddFolderModal />
+    </div>
   )
 }
 

@@ -10,7 +10,7 @@ const Header = () => {
   const { session } = useUser()
 
   return (
-    <header className="border-b border-white/10">
+    <header className="supports-backdrop-blur:bg-white/60 sticky top-0 z-40 w-full flex-none bg-white/95 backdrop-blur transition-colors duration-500 dark:border-slate-50/[0.06] dark:bg-transparent lg:z-50 lg:border-b lg:border-slate-900/10">
       <nav className="mx-auto h-24 w-full max-w-4xl">
         <ul className="mx-auto flex h-full items-center">
           <li className="flex-1">

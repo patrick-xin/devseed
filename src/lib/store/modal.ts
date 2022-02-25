@@ -33,7 +33,6 @@ export const useMarkFormModalStore = create<MarkFormModalState>((set) => ({
         isModalOpen: true,
         modalType: 'edit',
         title: 'Update Mark',
-
         markId: markId,
       })
     }
@@ -43,10 +42,9 @@ export const useMarkFormModalStore = create<MarkFormModalState>((set) => ({
       isModalOpen: false,
       modalType: undefined,
       title: '',
-
       markId: '',
       selectedTags: [],
-      markType: '',
+      markType: markTypes[0],
     }),
   setMarkType: (markType: string) => set({ markType }),
   markType: markTypes[0],

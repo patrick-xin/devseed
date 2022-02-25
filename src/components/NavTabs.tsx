@@ -5,12 +5,12 @@ import { ButtonLink } from './buttons'
 
 const NavTabs = () => {
   return (
-    <div className="sticky top-0 flex h-screen">
-      <ul className="flex h-1/4 flex-col space-y-4 text-sm lg:mt-24">
+    <div className="flex lg:sticky lg:top-0 lg:h-screen">
+      <ul className="flex items-center gap-2 text-xs lg:mt-24 lg:h-1/4 lg:flex-col lg:space-y-4 lg:text-sm">
         <li>
           <ButtonLink
             className="inline-flex w-full items-center rounded rounded-b-sm border-b border-white/10 transition-colors ease-linear hover:bg-gray-100 dark:hover:bg-primary"
-            href="/me"
+            href="/dashboard"
           >
             <FaSeedling className="mr-6 text-green-500" />
             My Seeds

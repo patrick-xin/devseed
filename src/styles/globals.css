@@ -4,13 +4,16 @@
 
 @layer base {
   body {
-    @apply text-gray-600 dark:bg-[#0f0f0f] dark:text-[#e5e5e5];
+    @apply text-gray-600 dark:bg-[#0f0f0f] dark:text-snow;
   }
 }
 
 @layer utilities {
   .form-input {
     @apply relative block h-10 w-full appearance-none rounded-md border border-gray-300 bg-transparent px-3 py-2 text-base text-gray-900 placeholder-gray-500 placeholder-shown:text-sm focus:border focus:border-yellow-500 focus:outline-none dark:border-white/10 dark:text-white/90 dark:focus:border-white/20;
+  }
+  .nav-link {
+    @apply relative inline-flex w-full items-center rounded-sm rounded-b-sm border-b border-white/10 p-4 text-sm transition-colors ease-linear hover:bg-gray-100 dark:hover:bg-primary;
   }
 }
 

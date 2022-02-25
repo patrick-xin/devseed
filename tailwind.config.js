@@ -7,9 +7,13 @@ module.exports = {
     extend: {
       colors: {
         primary: '#292929',
+        grey: '#1c1c1c',
+        snow: '#e5e5e5',
       },
       zIndex: {
         100: 100,
+        120: 120,
+        140: 140,
       },
       gridTemplateColumns: {
         16: 'repeat(16, minmax(0, 1fr))',

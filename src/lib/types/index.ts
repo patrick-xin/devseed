@@ -17,6 +17,9 @@ export type Mark = {
 export type Collection = {
   createdAt: string
   mark: Mark[]
+  id: string
+  folderId: string
+  folder: Folder | null
 }
 
 export type Comment = {
@@ -36,6 +39,16 @@ export type User = {
   name: string
   collection: Collection[]
   like: { markId: string }[]
+  folder: Folder[]
+}
+
+export type Folder = {
+  collectionId?: string
+  id: string
+  name: string
+  count: number
+  createdAt: string
+  collection: Collection[]
 }
 
 export type Like = {

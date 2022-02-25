@@ -5,7 +5,12 @@ import Badge from './Badge'
 import { IconButton } from '@/components/buttons'
 import { ChatIcon, EditIcon, HeartSolidIcon } from '../icons'
 import { BiUpvote, BiDownvote } from 'react-icons/bi'
-import { useDownvoteMark, useLikeMark, useUpvoteMark } from '@/lib/hooks'
+import {
+  useDownvoteMark,
+  useSaveMark,
+  useUnsaveMark,
+  useUpvoteMark,
+} from '@/lib/hooks'
 import { useMarkFormModalStore } from '@/lib/store/modal'
 
 import { capLetter } from 'uitls'
@@ -24,19 +29,23 @@ const SeedMark = ({ bookmark, isOwner, hasLiked, hasVoted }: SeedMarkProps) => {
   const { upvoteMark } = useUpvoteMark()
   const { downvoteMark } = useDownvoteMark()
   const { openModal } = useMarkFormModalStore()
-  const { likeMark } = useLikeMark()
-
+  const { saveMark } = useSaveMark()
+  const { unSaveMark } = useUnsaveMark()
   const renderLikeIcon = () => {
     if (!isOwner && !hasLiked)
       return (
-        <IconButton onClick={() => likeMark(id)}>
+        <IconButton onClick={() => saveMark(id)}>
           <FaSeedling className="text-green-500" />
         </IconButton>
       )
 
-    if (!isOwner && hasLiked)
+    if (!isOwner)
       return (
-        <IconButton>
+        <IconButton
+          onClick={() => {
+            unSaveMark(id)
+          }}
+        >
           <HeartSolidIcon />
         </IconButton>
       )
@@ -60,7 +69,7 @@ const SeedMark = ({ bookmark, isOwner, hasLiked, hasVoted }: SeedMarkProps) => {
             <span className="text-xs">{_count.comments}</span>
           </div>
           <div className="flex items-center gap-1">
-            <HeartSolidIcon />
+            <FaSeedling className="text-green-500" />
             <span className="text-xs">{_count.collection}</span>
           </div>
         </div>
@@ -111,13 +120,13 @@ const SeedMark = ({ bookmark, isOwner, hasLiked, hasVoted }: SeedMarkProps) => {
           <div className="flex gap-2">
             <IconButton
               onClick={() => upvoteMark(id)}
-              disabled={hasVoted || isOwner}
+              //disabled={hasVoted || isOwner}
             >
               <BiUpvote className={`${!hasVoted && 'text-green-600'}`} />
             </IconButton>
             <IconButton
               onClick={() => downvoteMark(id)}
-              disabled={!hasVoted || isOwner}
+              //disabled={!hasVoted || isOwner}
             >
               <BiDownvote className={`${hasVoted && 'text-green-600'}`} />
             </IconButton>

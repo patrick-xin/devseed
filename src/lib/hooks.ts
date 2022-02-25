@@ -2,6 +2,7 @@ import { Tag } from '@prisma/client'
 import { useSession } from 'next-auth/react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import {
+  createFolder,
   createMark,
   deleteMark,
   downvoteMark,
@@ -10,8 +11,10 @@ import {
   getTags,
   getUser,
   getUserMark,
-  likeMark,
+  moveCollectionToFolder,
+  saveMark,
   submitComment,
+  unSaveMark,
   updateMark,
   upvoteMark,
 } from 'services/api'
@@ -64,6 +67,37 @@ export const useUserPreference = () => {
   return { userPreference: data }
 }
 
+export const useUserFolders = () => {
+  const { data: session } = useSession()
+  const { data } = useQuery('user', getUser, {
+    enabled: Boolean(session),
+    select: (data) => {
+      return data.folder
+    },
+  })
+  return { userFolders: data }
+}
+export const useUserFolderCollections = (queryId: string | undefined) => {
+  const { data: session } = useSession()
+  const { data } = useQuery('user', getUser, {
+    enabled: Boolean(session) && Boolean(queryId),
+    select: (data) => {
+      return data.folder.find((folder) => folder.id === queryId)?.collection
+    },
+  })
+  return { FolderCollections: data }
+}
+
+export const useUserCollections = () => {
+  const { data: session } = useSession()
+  const { data } = useQuery('user', getUser, {
+    enabled: Boolean(session),
+    select: (data) => {
+      return data.collection
+    },
+  })
+  return { userCollections: data }
+}
 export const useUserMark = (id: string) => {
   const { data, isLoading } = useQuery(['mark', id], () => getUserMark(id), {
     enabled: !!id,
@@ -75,15 +109,26 @@ export const useUserMark = (id: string) => {
   }
 }
 
-export const useLikeMark = () => {
+export const useSaveMark = () => {
   const queryClient = useQueryClient()
-  const { mutate, isLoading } = useMutation((id: string) => likeMark(id), {
+  const { mutate, isLoading } = useMutation((id: string) => saveMark(id), {
     onSuccess: () => {
       queryClient.invalidateQueries('user')
       queryClient.invalidateQueries('marks')
     },
   })
-  return { likeMark: mutate, isLoading }
+  return { saveMark: mutate, isLoading }
+}
+
+export const useUnsaveMark = () => {
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation((id: string) => unSaveMark(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('user')
+      queryClient.invalidateQueries('marks')
+    },
+  })
+  return { unSaveMark: mutate, isLoading }
 }
 
 export const useCreateMark = () => {
@@ -172,9 +217,7 @@ export const useDeleteMark = () => {
   const { toast } = useToastStore()
   const { closeModal } = useConfirmModalStore()
   const { mutate, isLoading } = useMutation((id: string) => deleteMark(id), {
-    onSuccess: (data) => {
-      console.log(data)
-
+    onSuccess: () => {
       queryClient.invalidateQueries(['user'])
       queryClient.invalidateQueries(['marks'])
       closeModal()
@@ -182,4 +225,31 @@ export const useDeleteMark = () => {
     },
   })
   return { deleteMark: mutate, isDeleting: isLoading }
+}
+
+export const useCreateFolder = () => {
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation(
+    ({ name }: { name: string }) => createFolder({ name }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['user'])
+      },
+    }
+  )
+  return { createFolder: mutate, isCreatingFolder: isLoading }
+}
+
+export const useMoveCollectionToFolder = () => {
+  const queryClient = useQueryClient()
+  const { mutate, isLoading } = useMutation(
+    ({ collectionId, folderId }: { collectionId: string; folderId: string }) =>
+      moveCollectionToFolder({ collectionId, folderId }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['user'])
+      },
+    }
+  )
+  return { moveCollectionToFolder: mutate, isMoving: isLoading }
 }

@@ -75,8 +75,21 @@ export const getMarks = async ({ pageParam = '', order = 'desc' }) => {
   return data.json()
 }
 
-export const likeMark = async (id: string) => {
-  const data = await fetch(`/api/m/${id}/like`, {
+export const getTrendingMarks = async ({ pageParam = '' }) => {
+  const data = await fetch(
+    `${API_BASE_URL}/api/mark/trending?cursor=${pageParam}`
+  )
+  return data.json()
+}
+
+export const saveMark = async (id: string) => {
+  const data = await fetch(`/api/m/${id}/save`, {
+    method: 'PATCH',
+  })
+  return data.json()
+}
+export const unSaveMark = async (id: string) => {
+  const data = await fetch(`/api/m/${id}/unsave`, {
     method: 'PATCH',
   })
   return data.json()
@@ -131,6 +144,41 @@ export const submitComment = async ({
     body: JSON.stringify({
       content,
       id,
+    }),
+  })
+  return data.json()
+}
+
+export const createFolder = async ({ name }: { name: string }) => {
+  const data = await fetch(`/api/folder`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name,
+    }),
+  })
+  return data.json()
+}
+
+export const moveCollectionToFolder = async ({
+  collectionId,
+  folderId,
+}: {
+  collectionId: string
+  folderId: string
+}) => {
+  const data = await fetch(`/api/folder`, {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      collectionId,
+      folderId,
     }),
   })
   return data.json()

@@ -13,7 +13,7 @@ const BasicLayout = ({ children }: BasicLayoutProps) => {
     <>
       <Header />
 
-      <div className="relative mx-auto grid min-h-[calc(100vh-6rem)] grid-cols-[160px_1fr_120px] gap-10 px-6 md:mx-12 lg:pt-12">
+      <div className="gird-cols-1 relative mx-auto grid min-h-[calc(100vh-6rem)] gap-10 px-6 md:mx-12 lg:grid-cols-[160px_1fr_120px] lg:pt-12">
         <NavTabs />
         <div>{children}</div>
 

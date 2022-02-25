@@ -29,23 +29,36 @@ model User {
   interests     Tag[]
   like          Like[]
   collection    Collection[]
+  folder Folder[]
 }
 
 model Collection {
   id     String @id @default(cuid())
   user   User   @relation(fields: [userId], references: [id])
   userId String
-  mark   Mark[]   @relation(fields: [markId], references: [id])
+  mark   Mark[]   
   markId String 
   createdAt DateTime @default(now())
- 
+  folder Folder? @relation(fields: [folderId], references: [id])
+  folderId String?
+}
+
+model Folder {
+  id     String @id @default(cuid())
+  name String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  collection   Collection[]   
+  collectionId String? 
+  createdAt DateTime @default(now())
+  count Int @default(0)
 }
 
 model Like {
   id     String @id @default(cuid())
   user   User   @relation(fields: [userId], references: [id])
   userId String
-  mark   Mark[]   @relation(fields: [markId], references: [id])
+  mark   Mark[]  
   markId String 
   createdAt DateTime @default(now())
 }
@@ -67,7 +80,7 @@ model Mark {
   author      User        @relation(fields: [authorId], references: [id])
   authorId    String
   description String
-  tags        Tag[]       @relation(fields: [tagId], references: [id])
+  tags        Tag[]      
   tagId       String?
   collection  Collection[]
   type        Type

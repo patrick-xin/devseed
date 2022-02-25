@@ -1,7 +1,7 @@
 import cn from 'classnames'
 
 type LoadingIconProps = {
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xs'
 }
 
 const LoadingIcon = ({ size = 'md' }: LoadingIconProps) => {
@@ -12,6 +12,7 @@ const LoadingIcon = ({ size = 'md' }: LoadingIconProps) => {
         'h-6 w-6': size === 'md',
         'h-8 w-8': size === 'lg',
         'h-4 w-4': size === 'sm',
+        'h-3 w-3': size === 'xs',
       })}
       viewBox="0 0 24 24"
       stroke="currentColor"

@@ -11,28 +11,14 @@ handler.use(middleware)
 
 handler.use(authHandler)
 
-handler.patch(async ({ db, user, body }, res) => {
-  const { content, id } = body
-
+handler.patch(async (_, res) => {
   try {
-    await db.mark.update({
-      where: { id },
-      data: {
-        comments: {
-          create: {
-            content,
-            userId: user.id,
-          },
-        },
-      },
-    })
-
     res.status(200).json({
-      message: 'Comment added.',
+      message: 'Mark has been added to the collection.',
     })
   } catch (error) {
     res.status(500).json({
-      message: 'Error submitting comment, please try again later.',
+      message: 'Try again later.',
     })
   }
 })
