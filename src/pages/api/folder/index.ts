@@ -22,7 +22,7 @@ handler.post(async ({ db, user, body }, res) => {
       },
     })
     res.status(200).json({
-      message: 'Mark has been created',
+      message: 'Folder has been created',
     })
   } catch (err) {
     res.status(500).json({
@@ -42,7 +42,7 @@ handler.patch(async ({ db, body }, res) => {
     },
   })
   res.status(200).json({
-    message: 'Mark has been created',
+    message: 'Folder updated.',
   })
 })
 

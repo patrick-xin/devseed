@@ -4,8 +4,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { FormLayout } from '@/components/layout'
-import { useTags, useUserMark } from '@/lib/hooks'
-import { createMark } from 'services/api'
+import { useTags } from '@/mark/hooks'
+import { useUserMark } from '@/user/hooks'
+import { createMark } from '@/mark/api'
+
 import { useRouter } from 'next/router'
 import { markTypes } from '@/lib/constants'
 import { Listbox } from '@headlessui/react'
@@ -144,9 +146,12 @@ const EditPage = () => {
             className="form-input min-h-[10rem]"
             {...register('description')}
           />
-          <div className="absolute right-2 bottom-0 px-2 text-white/30">
-            {description?.length === 0 ? '' : description?.length}
-          </div>
+          {description && (
+            <div className="absolute right-2 bottom-0 px-2 text-white/30">
+              {description?.length === 0 ? '' : description?.length}
+            </div>
+          )}
+
           <FormErrorMessage message={errors.description?.message} />
         </div>
         <div className="flex justify-end">

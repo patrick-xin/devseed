@@ -1,9 +1,9 @@
-import { useUser } from '@/lib/hooks'
+import { useUser } from '@/user/hooks'
 
 import Link from 'next/link'
 
 import { ButtonLink } from '@/components/buttons'
-import { ProfileButton } from '@/components'
+import { ProfileButton } from '@/user/components'
 import SearchInput from './SearchInput'
 
 const Header = () => {

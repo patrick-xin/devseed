@@ -20,6 +20,7 @@ handler.patch(async ({ db, user, query }, res) => {
       data: {
         collection: {
           create: {
+            collectionMark: { create: { markId: id } },
             mark: { connect: { id } },
             markId: id,
           },
@@ -31,6 +32,8 @@ handler.patch(async ({ db, user, query }, res) => {
       message: 'Mark has been added to the collection.',
     })
   } catch (error) {
+    console.log(error)
+
     res.status(500).json({
       message: 'Try again later.',
     })

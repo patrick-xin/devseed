@@ -1,6 +1,6 @@
-import { usePopularTags } from '@/lib/hooks'
-import React from 'react'
-import { Badge } from '../mark'
+import { usePopularTags } from '@/mark/hooks'
+
+import { Badge } from '@/mark/components'
 
 const SidebarRight = () => {
   const { populatTags, isLoadingPopularTags } = usePopularTags()

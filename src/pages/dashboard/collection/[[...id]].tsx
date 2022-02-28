@@ -1,11 +1,11 @@
-import DashboardLayout from '@/components/layout/DashboardLayout'
-import PersonalBookmark from '@/components/mark/Personalmark'
+import { DashboardLayout } from '@/dashboard/components'
+import { UserMark } from '@/user/components'
 import { GridContainer } from '@/components'
 import {
   useUserCollections,
   useUserFolderCollections,
   useUserFolders,
-} from '@/lib/hooks'
+} from '@/user/hooks'
 
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -13,11 +13,12 @@ import { useMemo } from 'react'
 const DashboardCollection = () => {
   const { query } = useRouter()
   const { userFolders } = useUserFolders()
-  const { userCollections } = useUserCollections()
 
-  const { FolderCollections } = useUserFolderCollections(
+  const { userCollections } = useUserCollections()
+  const { folderCollections } = useUserFolderCollections(
     query?.id?.[0] as string
   )
+  console.log(folderCollections)
 
   const title = useMemo(() => {
     return (
@@ -28,29 +29,36 @@ const DashboardCollection = () => {
   return (
     <DashboardLayout>
       {query.id ? (
-        <>
+        <div className="mx-auto w-full max-w-6xl">
           <h1 className="pb-4 lg:pb-12 lg:text-3xl">
             {title}
             <span className="mx-2 text-white/20">
-              ({FolderCollections?.length})
+              ({folderCollections?.length})
             </span>
           </h1>
           <GridContainer>
-            {FolderCollections?.map((c) => (
-              <PersonalBookmark
-                key={c.mark[0].id}
-                title={c.mark[0].title}
-                link={c.mark[0].url}
-                note={c.mark[0].description}
-                id={c.mark[0].id}
+            {folderCollections?.map((c, index) => (
+              <UserMark
+                key={c.collectionMark[0].id}
+                title={
+                  c.collectionMark[0].name ?? c.collectionMark[0].mark.title
+                }
+                link={c.collectionMark[0].mark.url}
+                description={
+                  c.collectionMark[0].note ??
+                  c.collectionMark[0].mark.description
+                }
+                id={c.collectionMark[0].id}
                 collectionId={c.id}
                 folders={userFolders}
+                index={index + 1}
+                folderName={title}
               />
             ))}
           </GridContainer>
-        </>
+        </div>
       ) : (
-        <>
+        <div className="mx-auto w-full max-w-6xl">
           <h1 className="pb-4 lg:pb-12 lg:text-3xl">
             {title} Marks I&apos;ve collected
             <span className="mx-2 text-white/20">
@@ -60,20 +68,21 @@ const DashboardCollection = () => {
           <GridContainer>
             {userCollections?.length === 0
               ? "havn't collected"
-              : userCollections?.map((c) => (
-                  <PersonalBookmark
-                    key={c.mark[0].id}
-                    title={c.mark[0].title}
-                    link={c.mark[0].url}
-                    note={c.mark[0].description}
-                    id={c.mark[0].id}
+              : userCollections?.map((c, index) => (
+                  <UserMark
+                    index={index + 1}
+                    key={c.collectionMark[0].id}
+                    title={c.collectionMark[0].mark.title}
+                    link={c.collectionMark[0].mark.url}
+                    description={c.collectionMark[0].mark.description}
+                    id={c.collectionMark[0].id}
                     collectionId={c.id}
                     folders={userFolders}
                     folderName={c.folder?.name}
                   />
                 ))}
           </GridContainer>
-        </>
+        </div>
       )}
     </DashboardLayout>
   )

@@ -1,34 +1,28 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
-import {
-  InfiniteData,
-  InitialDataFunction,
-  useInfiniteQuery,
-} from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import { Listbox } from '@headlessui/react'
 
-import { MarkLoader, SeedMark } from '@/components/mark'
+import { MarkLoader, SeedMark } from '@/mark/components/'
 import { CheckIcon, SelectorIcon } from '@/components/icons'
 
-import { useUserPreference } from '@/lib/hooks'
-import { API_BASE_URL, getMarks } from '@/services/api'
+import { useUserPreference } from '@/user/hooks'
 
 import type { Mark } from '@/lib/types'
-import type { GetStaticProps } from 'next'
-import type { Tag } from '@prisma/client'
-import BasicLayout from '@/components/layout/BasicLayout'
 
+import BasicLayout from '@/components/layout/BasicLayout'
+import { API_BASE_URL } from '@/lib/constants'
 import { useRouter } from 'next/router'
 
 type GroupResponse = { nextId?: string; marks: Mark[] }
 
-type MarksPageProps = {
-  initialData:
-    | InfiniteData<GroupResponse>
-    | InitialDataFunction<InfiniteData<GroupResponse>>
-    | undefined
-  tags: Tag[]
-}
+// type MarksPageProps = {
+//   initialData:
+//     | InfiniteData<GroupResponse>
+//     | InitialDataFunction<InfiniteData<GroupResponse>>
+//     | undefined
+//   tags: Tag[]
+// }
 const options = [
   { name: 'Newest', query: 'newest' },
   { name: 'Most Saved', query: 'saved' },
@@ -36,7 +30,7 @@ const options = [
   { name: 'Most Comments', query: 'comments' },
 ]
 
-export default function MarksPage({ initialData }: MarksPageProps) {
+export default function MarksPage() {
   const { inView, ref } = useInView({ rootMargin: '200px' })
   const { query, push } = useRouter()
   const [order, setOrder] = useState(options[0].query)
@@ -61,7 +55,6 @@ export default function MarksPage({ initialData }: MarksPageProps) {
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextId ?? false,
-        initialData,
       }
     )
 
@@ -178,29 +171,21 @@ export default function MarksPage({ initialData }: MarksPageProps) {
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const initialData = await getMarks({ pageParam: '' })
+// export const getStaticProps: GetStaticProps = async () => {
+//   try {
+//     const initialData = await getMarks({ pageParam: '' })
 
-    if (initialData.message) {
-      return {
-        redirect: {
-          destination: '/500',
-          permanent: false,
-        },
-      }
-    }
-    return {
-      props: {
-        initialData,
-      },
-    }
-  } catch (error) {
-    return {
-      redirect: {
-        destination: '/500',
-        permanent: false,
-      },
-    }
-  }
-}
+//     return {
+//       props: {
+//         initialData,
+//       },
+//     }
+//   } catch (error) {
+//     return {
+//       redirect: {
+//         destination: '/500',
+//         permanent: false,
+//       },
+//     }
+//   }
+// }

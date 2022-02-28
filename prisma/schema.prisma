@@ -1,11 +1,8 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearch","referentialIntegrity"]
-   
-
 }
 
 datasource db {
@@ -21,6 +18,7 @@ model User {
   role          Role         @default(VISTOR)
   comments      Comment[]
   marks         Mark[]
+  bio           String?
   name          String?
   emailVerified DateTime?
   image         String?
@@ -29,7 +27,27 @@ model User {
   interests     Tag[]
   like          Like[]
   collection    Collection[]
-  folder Folder[]
+  folder        Folder[]
+  profile       Profile?
+  followers     Follow[]      @relation("follower")
+  following     Follow[]      @relation("following")
+  notification  Notification[]
+  feed          Feed[] 
+}
+
+model Profile {
+  id         String   @id @default(cuid())
+  github     String?
+  linkedIn   String?
+  twitter    String?
+  facebook   String?
+  website    String?
+  about      String?
+  location   String?
+  coverImage String?
+  skills     String[]
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @unique
 }
 
 model Collection {
@@ -38,6 +56,7 @@ model Collection {
   userId String
   mark   Mark[]   
   markId String 
+  collectionMark CollectionMark[]
   createdAt DateTime @default(now())
   folder Folder? @relation(fields: [folderId], references: [id])
   folderId String?
@@ -51,7 +70,17 @@ model Folder {
   collection   Collection[]   
   collectionId String? 
   createdAt DateTime @default(now())
-  count Int @default(0)
+}
+
+model CollectionMark {
+  id     String @id @default(cuid())
+  name  String?
+  mark   Mark   @relation(fields: [markId], references: [id])
+  markId String
+  collection Collection @relation(fields: [collectionId], references: [id])
+  collectionId String
+  note String?
+  createdAt DateTime @default(now())
 }
 
 model Like {
@@ -61,6 +90,7 @@ model Like {
   mark   Mark[]  
   markId String 
   createdAt DateTime @default(now())
+  notification Notification?
 }
 
 
@@ -82,9 +112,11 @@ model Mark {
   description String
   tags        Tag[]      
   tagId       String?
-  collection  Collection[]
+  collection Collection[]
+  collectionMark  CollectionMark[]
   type        Type
   like Like[]
+  feed        Feed[]
 }
 
 enum Type {
@@ -109,6 +141,7 @@ model Comment {
   content   String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
+  notification Notification?
 }
 
 
@@ -148,4 +181,47 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+
+enum NotificationType {
+  COMMENT
+  LIKE
+  FOLLOWER
+  UNFOLLOW
+  SYSTEM
+}
+
+model Notification {
+  createdAt        DateTime         @default(now())
+  id               String           @id @default(cuid())
+  isRead           Boolean          @default(false)
+  user             User?            @relation(fields: [userId], references: [id])
+  userId           String?
+  comment          Comment?         @relation(fields: [commentId], references: [id])
+  commentId        String?          @unique
+  follows          Follow?         @relation(fields: [followsId], references: [id])
+  followsId        String?          @unique
+  likes            Like?            @relation(fields: [likesId], references: [id])
+  likesId          String?          @unique
+  notificationType NotificationType
+  message          Json
+}
+
+model Follow {
+  id           String        @id @default(cuid())
+  follower     User          @relation("follower", fields: [followerId], references: [id])
+  followerId   String
+  following    User          @relation("following", fields: [followingId], references: [id])
+  followingId  String
+  notification Notification?
+}
+
+model Feed {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  mark      Mark     @relation(fields: [markId], references: [id])
+  markId    String
 }

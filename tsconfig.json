@@ -21,6 +21,11 @@
     "paths": {
       "@/components": ["components"],
       "@/components/*": ["components/*"],
+      "@/dashboard/*": ["features/dashboard/*"],
+      "@/user/*": ["features/user/*"],
+      "@/comment/*": ["features/comment/*"],
+      "@/mark/*": ["features/mark/*"],
+      "@/modal/*": ["features/modal/*"],
       "@/services": ["services"],
       "@/services/*": ["services/*"],
       "@/hooks": ["hooks"],

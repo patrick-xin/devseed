@@ -8,30 +8,29 @@ import middleware from '@/lib/middleware'
 const handler = nc<Request, NextApiResponse>()
 
 handler.use(middleware)
-
-export declare const SortOrder: {
+declare const SortOrder: {
   asc: 'asc'
   desc: 'desc'
 }
 
 handler.get(async ({ db, query }, res) => {
   const limit = 6
-
+  const sortOrder: typeof SortOrder['desc'] = 'desc'
   const cursor = (query.cursor as string) ?? ''
   const cursorObj = cursor === '' ? undefined : { id: cursor }
   let orderBy
   const order = query.orderBy
   if (order === 'newest') {
-    orderBy = { createdAt: SortOrder['desc'] }
+    orderBy = { createdAt: sortOrder }
   }
   if (order === 'comments') {
-    orderBy = { comments: { _count: SortOrder['desc'] } }
+    orderBy = { comments: { _count: sortOrder } }
   }
   if (order === 'saved') {
-    orderBy = { collection: { _count: SortOrder['desc'] } }
+    orderBy = { collection: { _count: sortOrder } }
   }
   if (order === 'liked') {
-    orderBy = { like: { _count: SortOrder['desc'] } }
+    orderBy = { like: { _count: sortOrder } }
   }
 
   try {
@@ -41,7 +40,7 @@ handler.get(async ({ db, query }, res) => {
       skip: cursor == '' ? 0 : 1,
       cursor: cursorObj,
       select: {
-        author: { select: { image: true, name: true } },
+        author: { select: { image: true, username: true } },
         tags: { select: { name: true } },
         createdAt: true,
         description: true,

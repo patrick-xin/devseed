@@ -1,8 +1,6 @@
 import { ChatIcon } from '@/components/icons'
 
-import React from 'react'
-import { ButtonLink } from '@/components/buttons'
-import { Header } from '@/components'
+import { ButtonLink, Header } from '@/components'
 
 const HomePage = () => {
   return (

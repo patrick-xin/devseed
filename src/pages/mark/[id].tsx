@@ -1,25 +1,29 @@
 import { BsLink } from 'react-icons/bs'
 
 import { ButtonLink, IconButton } from '@/components/buttons'
-import { UserAvatarWithName, Badge, SubHeading } from '@/components/mark'
+import { Badge, SubHeading } from '@/mark/components'
+import { UserAvatarWithName } from '@/user/components'
+
 import BasicLayout from '@/components/layout/BasicLayout'
 import prisma from '@/lib/prisma'
 
 import type { GetStaticProps } from 'next'
 
-import { capLetter, capLetters } from 'uitls'
+import { capLetter, capLetters } from '@/utils'
 import { format } from 'date-fns'
-import { useGetMark, useUser } from '@/lib/hooks'
+import { useGetMark } from '@/mark/hooks'
+import { useUser } from '@/user/hooks'
 import { EditIcon } from '@/components/icons'
 import { useMarkFormModalStore } from '@/lib/store/modal'
 import { dehydrate, QueryClient } from 'react-query'
-import { getMark } from '@/services/api'
-import CommentSection from '@/components/comment/Comment'
+import { getMark } from '@/mark/api'
+import { Comment } from '@/comment/components'
 
 const DetailPage = ({ id }: { id: string }) => {
   const { user } = useUser()
   const { openModal } = useMarkFormModalStore()
   const { mark, isLoadingMark } = useGetMark(id)
+  console.log(mark)
 
   const isOwner = user?.id === mark?.authorId
   if (isLoadingMark) return <div>loading</div>
@@ -49,7 +53,7 @@ const DetailPage = ({ id }: { id: string }) => {
             <SubHeading title="Created By" />
             <UserAvatarWithName
               size="sm"
-              username={mark.author?.name}
+              username={mark.author?.username}
               image={mark.author?.image}
             />
           </div>
@@ -83,9 +87,7 @@ const DetailPage = ({ id }: { id: string }) => {
             <h3 className="pb-4 lg:text-xl">
               Comments ({mark.comments.length})
             </h3>
-            {mark.comments && (
-              <CommentSection comments={mark.comments} id={mark.id} />
-            )}
+            {mark.comments && <Comment comments={mark.comments} id={mark.id} />}
           </div>
         </div>
       )}

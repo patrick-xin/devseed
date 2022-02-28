@@ -1,9 +1,9 @@
-import { useUser } from '@/lib/hooks'
+import { useUser } from '@/user/hooks'
 
-import DeleteConfirmModal from '@/components/mark/DeleteConfirmModal'
+import { DeleteConfirmModal } from '@/modal/components'
 
-import DashboardLayout from '@/components/layout/DashboardLayout'
-import PersonalBookmark from '@/components/mark/Personalmark'
+import { DashboardLayout } from '@/dashboard/components'
+import { UserMark } from '@/user/components'
 
 import { GridContainer, Loading } from '@/components'
 
@@ -15,13 +15,14 @@ const Dashboard = () => {
     <DashboardLayout>
       <section>
         <GridContainer>
-          {user.marks.map((mark) => (
-            <PersonalBookmark
+          {user.marks.map((mark, index) => (
+            <UserMark
               key={mark.id}
               title={mark.title}
               link={mark.url}
-              note={mark.description}
+              description={mark.description}
               id={mark.id}
+              index={index + 1}
             />
           ))}
         </GridContainer>

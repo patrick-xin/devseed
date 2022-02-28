@@ -7,7 +7,7 @@ import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import dynamic from 'next/dynamic'
 import '@/styles/globals.css'
-import FormModal from '@/components/form/FormModal'
+import { FormModal } from '@/modal/components'
 
 const Toast = dynamic(() => import('@/components/Toast'), { ssr: false })
 type NextPageWithLayout = NextPage & {
